@@ -1,0 +1,159 @@
+import { Metadata } from "next"
+import Link from "next/link"
+import { Building2, Paintbrush, Lightbulb, Users, ArrowRight } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+
+export const metadata: Metadata = {
+  title: "Services",
+  description: "Explore REVIFI's suite of services - from commercial building restoration to interior design mastery in Cleveland, Ohio.",
+}
+
+const services = [
+  {
+    number: "01",
+    title: "Commercial Building Restoration",
+    description: "Transform your vision into reality with our expert restoration services. From concept to construction, we specialize in crafting innovative and functional spaces that honor the past while embracing the future.",
+    features: [
+      "Historic preservation expertise",
+      "Structural assessment and repair",
+      "Code compliance and permitting",
+      "Sustainable restoration practices",
+      "Adaptive reuse solutions",
+    ],
+    icon: Building2,
+  },
+  {
+    number: "02",
+    title: "Interior Design Mastery",
+    description: "Our interior design services blend aesthetics with functionality, creating spaces that inspire and delight. We curate every element to reflect your unique vision and lifestyle.",
+    features: [
+      "Space planning and layout",
+      "Custom furniture design",
+      "Material and finish selection",
+      "Lighting design",
+      "Art and accessory curation",
+    ],
+    icon: Paintbrush,
+  },
+  {
+    number: "03",
+    title: "Project Consultation",
+    description: "Our expert consultants guide you through every phase of your project, from initial concept to final delivery. We provide strategic insights and practical solutions tailored to your needs.",
+    features: [
+      "Feasibility studies",
+      "Budget planning",
+      "Timeline development",
+      "Vendor coordination",
+      "Project management",
+    ],
+    icon: Lightbulb,
+  },
+  {
+    number: "04",
+    title: "Effortless Acquisition",
+    description: "We streamline the property acquisition process, helping you identify and secure the perfect property for your investment or development goals.",
+    features: [
+      "Market analysis",
+      "Property identification",
+      "Due diligence support",
+      "Negotiation assistance",
+      "Closing coordination",
+    ],
+    icon: Users,
+  },
+]
+
+export default function ServicesPage() {
+  return (
+    <div className="flex flex-col">
+      {/* Hero Section */}
+      <section className="bg-background py-8">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h1 className="font-serif text-4xl font-bold tracking-tight sm:text-5xl">
+            Our Services
+          </h1>
+        </div>
+      </section>
+
+      {/* Services List */}
+      <section className="bg-background pt-4 pb-24">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-16">
+            {services.map((service, index) => (
+              <Card key={service.title} className="overflow-hidden">
+                <div className={`grid lg:grid-cols-2 ${index % 2 === 1 ? 'lg:grid-flow-dense' : ''}`}>
+                  <div className={`relative aspect-[4/3] bg-muted lg:aspect-auto ${index % 2 === 1 ? 'lg:col-start-2' : ''}`}>
+                    <div className="absolute inset-0 flex items-center justify-center text-muted-foreground">
+                      <service.icon className="h-24 w-24 opacity-20" />
+                    </div>
+                  </div>
+                  <CardContent className="flex flex-col justify-center p-8 lg:p-12">
+                    <p className="text-sm font-medium text-goldenrod dark:text-[#fbbf24]">
+                      {service.number}
+                    </p>
+                    <h2 className="mt-2 font-serif text-3xl font-bold">{service.title}</h2>
+                    <p className="mt-4 text-muted-foreground">{service.description}</p>
+                    <ul className="mt-6 space-y-2">
+                      {service.features.map((feature) => (
+                        <li key={feature} className="flex items-center gap-2 text-sm">
+                          <span className="text-navy dark:text-[#3b82f6]">→</span>
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Process CTA */}
+      <section className="border-t border-border bg-background py-24">
+        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-3xl text-center">
+            <h2 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl">
+              Our Process
+            </h2>
+            <p className="mt-4 text-muted-foreground">
+              Every project begins with understanding your vision. Learn more about our 
+              comprehensive approach to transforming spaces.
+            </p>
+            <div className="mt-8">
+              <Link href="/about">
+                <Button className="gap-2">
+                  Learn About Our Process
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="bg-muted py-24 text-foreground">
+        <div className="container mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+          <h2 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl">
+            Ready to Start Your Project?
+          </h2>
+          <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
+            Let&apos;s discuss how we can bring your vision to life.
+          </p>
+          <div className="mt-8">
+            <Link href="/contact">
+              <Button
+                size="lg"
+                variant="outline"
+              >
+                Get Started
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+    </div>
+  )
+}
