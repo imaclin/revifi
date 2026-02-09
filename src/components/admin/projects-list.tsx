@@ -9,6 +9,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Plus, Building2, GripVertical, LayoutGrid, List } from "lucide-react"
 import { toast } from "sonner"
+import { useAdminPath } from "@/hooks/use-admin-path"
 
 interface Project {
   id: string
@@ -30,6 +31,7 @@ interface ProjectsListProps {
 
 export function ProjectsList({ initialProjects }: ProjectsListProps) {
   const router = useRouter()
+  const adminPath = useAdminPath()
   const [projects, setProjects] = useState(initialProjects)
   const [viewMode, setViewMode] = useState<"list" | "grid">("list")
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null)
@@ -69,7 +71,7 @@ export function ProjectsList({ initialProjects }: ProjectsListProps) {
   }
 
   const handleRowClick = (projectId: string) => {
-    router.push(`/admin/projects/${projectId}`)
+    router.push(adminPath(`/admin/projects/${projectId}`))
   }
 
   if (projects.length === 0) {
@@ -81,7 +83,7 @@ export function ProjectsList({ initialProjects }: ProjectsListProps) {
           <p className="mt-2 text-muted-foreground">
             Get started by creating your first project.
           </p>
-          <Link href="/admin/projects/new" className="mt-4 inline-block">
+          <Link href={adminPath("/admin/projects/new")} className="mt-4 inline-block">
             <Button>Create Project</Button>
           </Link>
         </CardContent>

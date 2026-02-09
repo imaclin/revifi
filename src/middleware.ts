@@ -12,13 +12,18 @@ export async function middleware(request: NextRequest) {
     return NextResponse.rewrite(new URL('/not-found', request.url), { status: 404 })
   }
 
-  // On admin subdomain: rewrite root to /admin dashboard
-  if (isAdminSubdomain && pathname === '/') {
-    return NextResponse.rewrite(new URL('/admin', request.url))
-  }
-
-  // On admin subdomain: allow admin, login, api routes; redirect everything else to main domain
+  // On admin subdomain: rewrite paths to /admin/* so URLs stay clean
+  // e.g. admin.revifi.com/projects -> serves /admin/projects
   if (isAdminSubdomain && !pathname.startsWith('/admin') && !pathname.startsWith('/login') && !pathname.startsWith('/api') && !pathname.startsWith('/_next')) {
+    const adminRoutes = ['/projects', '/media', '/team', '/settings']
+    const isAdminRoute = pathname === '/' || adminRoutes.some(route => pathname === route || pathname.startsWith(route + '/'))
+
+    if (isAdminRoute) {
+      const rewritePath = pathname === '/' ? '/admin' : `/admin${pathname}`
+      return NextResponse.rewrite(new URL(rewritePath, request.url))
+    }
+
+    // Non-admin routes on admin subdomain -> redirect to main domain
     const mainDomain = hostname.replace('admin.', '')
     return NextResponse.redirect(new URL(`https://${mainDomain}${pathname}`, request.url))
   }

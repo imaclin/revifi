@@ -1,9 +1,9 @@
-import Link from "next/link"
 import { createClient } from "@/lib/supabase/server"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Plus } from "lucide-react"
 import { ProjectsList } from "@/components/admin/projects-list"
+import { AdminLink } from "@/components/admin/admin-link"
 
 export default async function ProjectsPage() {
   const supabase = await createClient()
@@ -22,12 +22,12 @@ export default async function ProjectsPage() {
             Manage your portfolio projects
           </p>
         </div>
-        <Link href="/admin/projects/new">
+        <AdminLink href="/admin/projects/new">
           <Button className="gap-2">
             <Plus className="h-4 w-4" />
             New Project
           </Button>
-        </Link>
+        </AdminLink>
       </div>
 
       {error ? (

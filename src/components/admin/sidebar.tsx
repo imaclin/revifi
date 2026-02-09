@@ -21,6 +21,7 @@ import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/s
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden"
 import { cn } from "@/lib/utils"
 import { toast } from "sonner"
+import { useAdminPath } from "@/hooks/use-admin-path"
 
 const navigation = [
   { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
@@ -38,6 +39,7 @@ export function AdminSidebar({ user }: AdminSidebarProps) {
   const pathname = usePathname()
   const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
+  const adminPath = useAdminPath()
 
   const handleSignOut = async () => {
     const supabase = createClient()
@@ -55,13 +57,14 @@ export function AdminSidebar({ user }: AdminSidebarProps) {
       <div className="hidden lg:flex h-screen w-64 flex-col border-r border-border bg-card">
         <nav className="flex-1 space-y-1 p-4 pt-8">
           {navigation.map((item) => {
-            const isActive = pathname === item.href || 
-              (item.href !== "/admin" && pathname.startsWith(item.href))
+            const resolvedHref = adminPath(item.href)
+            const isActive = pathname === item.href || pathname === resolvedHref ||
+              (item.href !== "/admin" && (pathname.startsWith(item.href) || pathname.startsWith(resolvedHref)))
             
             return (
               <Link
                 key={item.name}
-                href={item.href}
+                href={resolvedHref}
                 className={cn(
                   "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
                   isActive
@@ -124,13 +127,14 @@ export function AdminSidebar({ user }: AdminSidebarProps) {
           <div className="flex h-full flex-col">
             <nav className="flex-1 space-y-1 p-4 pt-8">
               {navigation.map((item) => {
-                const isActive = pathname === item.href || 
-                  (item.href !== "/admin" && pathname.startsWith(item.href))
+                const resolvedHref = adminPath(item.href)
+                const isActive = pathname === item.href || pathname === resolvedHref ||
+                  (item.href !== "/admin" && (pathname.startsWith(item.href) || pathname.startsWith(resolvedHref)))
                 
                 return (
                   <Link
                     key={item.name}
-                    href={item.href}
+                    href={resolvedHref}
                     onClick={closeSidebar}
                     className={cn(
                       "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",

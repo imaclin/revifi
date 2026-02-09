@@ -12,12 +12,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft, Save, Trash2, Check } from "lucide-react"
 import { toast } from "sonner"
 import { ProjectMedia } from "@/components/admin/project-media"
+import { useAdminPath } from "@/hooks/use-admin-path"
 
 type Props = {
   params: Promise<{ id: string }>
 }
 
 export default function EditProjectPage({ params }: Props) {
+  const adminPath = useAdminPath()
   const { id } = use(params)
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(true)
@@ -101,7 +103,7 @@ export default function EditProjectPage({ params }: Props) {
 
       if (error || !project) {
         toast.error("Project not found")
-        router.push("/admin/projects")
+        router.push(adminPath("/admin/projects"))
         return
       }
 
@@ -186,7 +188,7 @@ export default function EditProjectPage({ params }: Props) {
     }
 
     toast.success("Project deleted")
-    router.push("/admin/projects")
+    router.push(adminPath("/admin/projects"))
   }
 
   if (isLoading) {
@@ -202,7 +204,7 @@ export default function EditProjectPage({ params }: Props) {
       {/* Mobile Layout */}
       <div className="space-y-4 md:hidden">
         <div className="flex items-center justify-between">
-          <Link href="/admin/projects">
+          <Link href={adminPath("/admin/projects")}>
             <Button variant="ghost" size="icon">
               <ArrowLeft className="h-4 w-4" />
             </Button>
@@ -235,7 +237,7 @@ export default function EditProjectPage({ params }: Props) {
       <div className="hidden md:block space-y-2">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Link href="/admin/projects">
+            <Link href={adminPath("/admin/projects")}>
               <Button variant="ghost" size="icon">
                 <ArrowLeft className="h-4 w-4" />
               </Button>

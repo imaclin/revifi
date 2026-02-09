@@ -9,9 +9,11 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { toast } from "sonner"
+import { useAdminPath } from "@/hooks/use-admin-path"
 
 export default function LoginPage() {
   const router = useRouter()
+  const adminPath = useAdminPath()
   const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState({
     email: "",
@@ -37,7 +39,7 @@ export default function LoginPage() {
       }
 
       toast.success("Welcome back!")
-      router.push("/admin")
+      router.push(adminPath("/admin"))
       router.refresh()
     } catch (error) {
       toast.error("Something went wrong", {

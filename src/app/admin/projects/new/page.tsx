@@ -12,9 +12,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft, Save, Check } from "lucide-react"
 import { toast } from "sonner"
 import { ProjectMedia } from "@/components/admin/project-media"
+import { useAdminPath } from "@/hooks/use-admin-path"
 
 export default function NewProjectPage() {
   const router = useRouter()
+  const adminPath = useAdminPath()
   const [isSaving, setIsSaving] = useState(false)
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
   const [media, setMedia] = useState<any[]>([])
@@ -142,7 +144,7 @@ export default function NewProjectPage() {
       {/* Mobile Layout */}
       <div className="space-y-4 md:hidden">
         <div className="flex items-center justify-between">
-          <Link href="/admin/projects">
+          <Link href={adminPath("/admin/projects")}>
             <Button variant="ghost" size="icon">
               <ArrowLeft className="h-4 w-4" />
             </Button>
@@ -168,7 +170,7 @@ export default function NewProjectPage() {
       {/* Desktop Layout */}
       <div className="hidden md:flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Link href="/admin/projects">
+          <Link href={adminPath("/admin/projects")}>
             <Button variant="ghost" size="icon">
               <ArrowLeft className="h-4 w-4" />
             </Button>

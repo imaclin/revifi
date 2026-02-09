@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { FolderKanban, Image, Users, Eye } from "lucide-react"
+import { AdminLink } from "@/components/admin/admin-link"
 
 export default async function AdminDashboard() {
   const supabase = await createClient()
@@ -71,7 +72,7 @@ export default async function AdminDashboard() {
             <CardTitle>Quick Actions</CardTitle>
           </CardHeader>
           <CardContent className="grid gap-2">
-            <a
+            <AdminLink
               href="/admin/projects/new"
               className="flex items-center gap-3 rounded-lg border border-border p-4 transition-colors hover:bg-muted"
             >
@@ -82,8 +83,8 @@ export default async function AdminDashboard() {
                   Add a new project to your portfolio
                 </p>
               </div>
-            </a>
-            <a
+            </AdminLink>
+            <AdminLink
               href="/admin/media"
               className="flex items-center gap-3 rounded-lg border border-border p-4 transition-colors hover:bg-muted"
             >
@@ -94,7 +95,7 @@ export default async function AdminDashboard() {
                   Add images and videos to your library
                 </p>
               </div>
-            </a>
+            </AdminLink>
           </CardContent>
         </Card>
 
