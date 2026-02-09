@@ -12,7 +12,12 @@ export async function middleware(request: NextRequest) {
     return NextResponse.rewrite(new URL('/not-found', request.url), { status: 404 })
   }
 
-  // On admin subdomain: redirect non-admin, non-login, non-api routes to main domain
+  // On admin subdomain: rewrite root to /admin dashboard
+  if (isAdminSubdomain && pathname === '/') {
+    return NextResponse.rewrite(new URL('/admin', request.url))
+  }
+
+  // On admin subdomain: allow admin, login, api routes; redirect everything else to main domain
   if (isAdminSubdomain && !pathname.startsWith('/admin') && !pathname.startsWith('/login') && !pathname.startsWith('/api') && !pathname.startsWith('/_next')) {
     const mainDomain = hostname.replace('admin.', '')
     return NextResponse.redirect(new URL(`https://${mainDomain}${pathname}`, request.url))
