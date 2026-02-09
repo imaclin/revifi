@@ -29,6 +29,11 @@ export const metadata: Metadata = {
     "construction management",
   ],
   authors: [{ name: "REVIFI" }],
+  icons: {
+    icon: "/revifi-icon.png",
+    shortcut: "/revifi-icon.png",
+    apple: "/revifi-icon.png",
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -37,12 +42,21 @@ export const metadata: Metadata = {
     title: "REVIFI | Historic Building Rehabilitation in Cleveland",
     description:
       "Revitalizing the great buildings of yesterday for a better tomorrow.",
+    images: [
+      {
+        url: "/revifi-icon.png",
+        width: 512,
+        height: 512,
+        alt: "REVIFI Logo",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "REVIFI | Historic Building Rehabilitation in Cleveland",
     description:
       "Revitalizing the great buildings of yesterday for a better tomorrow.",
+    images: ["/revifi-icon.png"],
   },
 };
 
