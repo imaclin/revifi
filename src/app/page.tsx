@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { HeroCarousel } from "@/components/hero-carousel"
 import { createClient } from "@/lib/supabase/server"
+import { ScrollAnimation, StaggerContainer, StaggerItem } from "@/components/animations/scroll-animations"
+import { BeforeAfterSlider } from "@/components/before-after-slider"
 
 const services = [
   {
@@ -79,7 +81,7 @@ export default async function Home() {
       <section className="border-t border-border bg-background py-24">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
-            <div className="flex flex-col justify-center">
+            <ScrollAnimation variant="slideInLeft" className="flex flex-col justify-center">
               <p className="text-sm font-medium uppercase tracking-widest text-muted-foreground">
                 About Us
               </p>
@@ -100,12 +102,16 @@ export default async function Home() {
                   </Button>
                 </Link>
               </div>
-            </div>
-            <div className="relative aspect-[4/3] overflow-hidden rounded-lg bg-muted">
-              <div className="absolute inset-0 flex items-center justify-center text-muted-foreground">
-                <Building2 className="h-24 w-24 opacity-20" />
-              </div>
-            </div>
+            </ScrollAnimation>
+            <ScrollAnimation variant="slideInRight">
+              <BeforeAfterSlider
+                beforeImage="https://a0.muscache.com/im/pictures/miso/Hosting-1216698124792854681/original/9f4b5397-d9d4-46d0-ba4f-d760fe35e922.jpeg?im_w=1200"
+                afterImage="https://a0.muscache.com/im/pictures/miso/Hosting-1216698124792854681/original/52034d96-99fc-4a0f-9bff-90c6f573573b.jpeg?im_w=1200"
+                beforeLabel="Before"
+                afterLabel="After"
+                className="aspect-[4/3]"
+              />
+            </ScrollAnimation>
           </div>
         </div>
       </section>
@@ -113,17 +119,18 @@ export default async function Home() {
       {/* Featured Projects Section */}
       <section className="border-t border-border bg-muted/30 py-24">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
+          <ScrollAnimation className="text-center">
             <p className="text-sm font-medium uppercase tracking-widest text-muted-foreground">
               Our Projects
             </p>
             <h2 className="mt-2 font-serif text-3xl font-bold tracking-tight sm:text-4xl">
               Some of Our Favorites
             </h2>
-          </div>
-          <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          </ScrollAnimation>
+          <StaggerContainer className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3" staggerDelay={0.15}>
             {projects.slice(0, 3).map((project, index) => (
-              <Link key={project.slug} href={`/projects/${project.slug}`}>
+              <StaggerItem key={project.slug}>
+              <Link href={`/projects/${project.slug}`}>
                 <Card className="group h-full overflow-hidden transition-all hover:shadow-lg p-0">
                   <div className="relative aspect-[4/3] overflow-hidden bg-muted">
                     {project.featured_image_url ? (
@@ -152,23 +159,24 @@ export default async function Home() {
                   </CardContent>
                 </Card>
               </Link>
+              </StaggerItem>
             ))}
-          </div>
-          <div className="mt-12 text-center">
+          </StaggerContainer>
+          <ScrollAnimation className="mt-12 text-center" delay={0.3}>
             <Link href="/projects">
               <Button variant="outline" size="lg" className="gap-2">
                 View All Projects
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
-          </div>
+          </ScrollAnimation>
         </div>
       </section>
 
       {/* Services Section */}
       <section className="border-t border-border bg-background py-24">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
+          <ScrollAnimation className="text-center">
             <p className="text-sm font-medium uppercase tracking-widest text-muted-foreground">
               Our Services
             </p>
@@ -179,10 +187,11 @@ export default async function Home() {
               Explore REVIFI&apos;s suite of services, delivering architectural innovation, 
               interior design mastery, sustainable solutions, and personalized consultations.
             </p>
-          </div>
-          <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          </ScrollAnimation>
+          <StaggerContainer className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4" staggerDelay={0.1}>
             {services.map((service, index) => (
-              <Card key={service.title} className="relative overflow-hidden">
+              <StaggerItem key={service.title}>
+              <Card className="relative overflow-hidden">
                 <CardContent className="p-6">
                   <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-muted">
                     <service.icon className="h-6 w-6" />
@@ -198,25 +207,27 @@ export default async function Home() {
                   </p>
                 </CardContent>
               </Card>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerContainer>
         </div>
       </section>
 
       {/* Testimonials Section */}
       <section className="border-t border-border bg-muted/30 py-24">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
+          <ScrollAnimation className="text-center">
             <p className="text-sm font-medium uppercase tracking-widest text-muted-foreground">
               Testimonials
             </p>
             <h2 className="mt-2 font-serif text-3xl font-bold tracking-tight sm:text-4xl">
               What Our Clients Say
             </h2>
-          </div>
-          <div className="mt-12 grid gap-8 md:grid-cols-3">
+          </ScrollAnimation>
+          <StaggerContainer className="mt-12 grid gap-8 md:grid-cols-3" staggerDelay={0.15}>
             {testimonials.map((testimonial) => (
-              <Card key={testimonial.author} className="h-full">
+              <StaggerItem key={testimonial.author}>
+              <Card className="h-full">
                 <CardContent className="flex h-full flex-col p-6">
                   <blockquote className="flex-1 text-muted-foreground">
                     &ldquo;{testimonial.content}&rdquo;
@@ -227,14 +238,15 @@ export default async function Home() {
                   </div>
                 </CardContent>
               </Card>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerContainer>
         </div>
       </section>
 
       {/* CTA Section */}
       <section className="border-t border-border bg-muted py-24 text-foreground">
-        <div className="container mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+        <ScrollAnimation className="container mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
           <h2 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl">
             Let&apos;s Get in Touch
           </h2>
@@ -251,7 +263,7 @@ export default async function Home() {
               </Button>
             </Link>
           </div>
-        </div>
+        </ScrollAnimation>
       </section>
     </div>
   )

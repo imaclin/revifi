@@ -3,6 +3,8 @@ import Link from "next/link"
 import { ArrowRight, Search, Lightbulb, PenTool, Hammer, Sparkles, Gift } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { ScrollAnimation, StaggerContainer, StaggerItem } from "@/components/animations/scroll-animations"
+import { createClient } from "@/lib/supabase/server"
 
 export const metadata: Metadata = {
   title: "About",
@@ -48,20 +50,15 @@ const process = [
   },
 ]
 
-const team = [
-  {
-    name: "KC Stitak",
-    role: "Architect & Construction Management",
-    bio: "With extensive experience in architectural design and construction management, KC brings a unique perspective to every project, ensuring structural integrity meets aesthetic excellence.",
-  },
-  {
-    name: "Kyle Lawrence",
-    role: "Designer & Client Relations",
-    bio: "Kyle's eye for design and dedication to client satisfaction ensures that every project reflects the unique vision and personality of its owners.",
-  },
-]
+export default async function AboutPage() {
+  const supabase = await createClient()
+  const { data: team } = await supabase
+    .from("team_members")
+    .select("*")
+    .eq("active", true)
+    .order("sort_order", { ascending: true })
 
-export default function AboutPage() {
+  const teamMembers = team || []
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
@@ -84,6 +81,7 @@ export default function AboutPage() {
       {/* Process Section */}
       <section className="border-b border-border bg-background pt-4 pb-24">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <ScrollAnimation>
           <div className="mb-8">
             <p className="text-lg text-muted-foreground">
               At REVIFI, we don&apos;t just design spaces; we tell stories. Our journey is rooted 
@@ -99,9 +97,11 @@ export default function AboutPage() {
               Our Process
             </h2>
           </div>
-          <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          </ScrollAnimation>
+          <StaggerContainer className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3" staggerDelay={0.1}>
             {process.map((item) => (
-              <Card key={item.step} className="relative overflow-hidden">
+              <StaggerItem key={item.step}>
+              <Card className="relative overflow-hidden">
                 <CardContent className="p-6">
                   <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-muted">
                     <item.icon className="h-6 w-6" />
@@ -117,27 +117,37 @@ export default function AboutPage() {
                   </p>
                 </CardContent>
               </Card>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerContainer>
         </div>
       </section>
 
       {/* Team Section */}
       <section className="border-b border-border bg-background py-24">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
+          <ScrollAnimation className="text-center">
             <p className="text-sm font-medium uppercase tracking-widest text-muted-foreground">
               You&apos;re in Good Hands
             </p>
             <h2 className="mt-2 font-serif text-3xl font-bold tracking-tight sm:text-4xl">
               Passionate Expertise, Collaborative Brilliance
             </h2>
-          </div>
-          <div className="mt-16 grid gap-8 md:grid-cols-2">
-            {team.map((member) => (
-              <Card key={member.name} className="overflow-hidden">
+          </ScrollAnimation>
+          <StaggerContainer className="mt-16 grid gap-8 md:grid-cols-2" staggerDelay={0.2}>
+            {teamMembers.map((member) => (
+              <StaggerItem key={member.id || member.name}>
+              <Card className="overflow-hidden">
                 <div className="grid md:grid-cols-2">
-                  <div className="aspect-square bg-muted" />
+                  {member.image_url ? (
+                    <img
+                      src={member.image_url}
+                      alt={member.name}
+                      className="aspect-square object-cover"
+                    />
+                  ) : (
+                    <div className="aspect-square bg-muted" />
+                  )}
                   <CardContent className="flex flex-col justify-center p-6">
                     <h3 className="font-serif text-2xl font-semibold">{member.name}</h3>
                     <p className="mt-1 text-sm font-medium text-navy dark:text-[#3b82f6]">
@@ -147,14 +157,15 @@ export default function AboutPage() {
                   </CardContent>
                 </div>
               </Card>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerContainer>
         </div>
       </section>
 
       {/* CTA Section */}
       <section className="bg-muted py-24 text-foreground">
-        <div className="container mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+        <ScrollAnimation className="container mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
           <h2 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl">
             Let&apos;s Get in Touch
           </h2>
@@ -171,7 +182,7 @@ export default function AboutPage() {
               </Button>
             </Link>
           </div>
-        </div>
+        </ScrollAnimation>
       </section>
     </div>
   )

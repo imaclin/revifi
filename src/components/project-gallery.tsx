@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import { Building2, ChevronLeft, ChevronRight, X, Grid } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
@@ -18,29 +18,48 @@ interface ProjectGalleryProps {
 
 export function ProjectGallery({ media, projectTitle }: ProjectGalleryProps) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
+  const modalRef = useRef<HTMLDivElement>(null)
+  const thumbnailContainerRef = useRef<HTMLDivElement>(null)
 
   const openModal = (index: number) => {
     setSelectedIndex(index)
   }
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setSelectedIndex(null)
-  }
+  }, [])
 
-  const goToPrevious = () => {
+  const goToPrevious = useCallback(() => {
     if (selectedIndex === null) return
     setSelectedIndex(selectedIndex === 0 ? media.length - 1 : selectedIndex - 1)
-  }
+  }, [selectedIndex, media.length])
 
-  const goToNext = () => {
+  const goToNext = useCallback(() => {
     if (selectedIndex === null) return
     setSelectedIndex(selectedIndex === media.length - 1 ? 0 : selectedIndex + 1)
-  }
+  }, [selectedIndex, media.length])
+
+  // Auto-focus modal when it opens so arrow keys work immediately
+  useEffect(() => {
+    if (selectedIndex !== null && modalRef.current) {
+      modalRef.current.focus()
+    }
+  }, [selectedIndex])
+
+  // Scroll active thumbnail into view
+  useEffect(() => {
+    if (selectedIndex !== null && thumbnailContainerRef.current) {
+      const activeThumb = thumbnailContainerRef.current.children[selectedIndex] as HTMLElement
+      if (activeThumb) {
+        activeThumb.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" })
+      }
+    }
+  }, [selectedIndex])
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Escape") closeModal()
-    if (e.key === "ArrowLeft") goToPrevious()
-    if (e.key === "ArrowRight") goToNext()
+    if (e.key === "ArrowLeft") { e.preventDefault(); goToPrevious() }
+    if (e.key === "ArrowRight") { e.preventDefault(); goToNext() }
   }
 
   if (!media || media.length === 0) {
@@ -124,10 +143,11 @@ export function ProjectGallery({ media, projectTitle }: ProjectGalleryProps) {
       {/* Modal */}
       {selectedIndex !== null && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90"
+          ref={modalRef}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 outline-none"
           onClick={closeModal}
           onKeyDown={handleKeyDown}
-          tabIndex={0}
+          tabIndex={-1}
         >
           {/* Close Button */}
           <Button
@@ -199,34 +219,39 @@ export function ProjectGallery({ media, projectTitle }: ProjectGalleryProps) {
 
           {/* Thumbnail Strip */}
           {media.length > 1 && (
-            <div className="absolute bottom-16 left-1/2 z-50 flex -translate-x-1/2 gap-2 overflow-x-auto rounded-lg bg-black/50 p-2">
-              {media.map((item, index) => (
-                <button
-                  key={item.id}
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    setSelectedIndex(index)
-                  }}
-                  className={`h-12 w-12 flex-shrink-0 overflow-hidden rounded transition-all ${
-                    index === selectedIndex
-                      ? "ring-2 ring-white"
-                      : "opacity-60 hover:opacity-100"
-                  }`}
-                >
-                  {item.type === "image" ? (
-                    <img
-                      src={item.url}
-                      alt={item.alt_text || projectTitle}
-                      className="h-full w-full object-cover"
-                    />
-                  ) : (
-                    <video
-                      src={item.url}
-                      className="h-full w-full object-cover"
-                    />
-                  )}
-                </button>
-              ))}
+            <div className="absolute bottom-16 left-1/2 z-50 w-full max-w-[90vw] -translate-x-1/2 sm:max-w-[600px]">
+              <div
+                ref={thumbnailContainerRef}
+                className="flex gap-2 overflow-x-auto rounded-lg bg-black/50 p-2 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-white/30"
+              >
+                {media.map((item, index) => (
+                  <button
+                    key={item.id}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setSelectedIndex(index)
+                    }}
+                    className={`h-12 w-12 flex-shrink-0 overflow-hidden rounded transition-all ${
+                      index === selectedIndex
+                        ? "ring-2 ring-white"
+                        : "opacity-60 hover:opacity-100"
+                    }`}
+                  >
+                    {item.type === "image" ? (
+                      <img
+                        src={item.url}
+                        alt={item.alt_text || projectTitle}
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      <video
+                        src={item.url}
+                        className="h-full w-full object-cover"
+                      />
+                    )}
+                  </button>
+                ))}
+              </div>
             </div>
           )}
         </div>

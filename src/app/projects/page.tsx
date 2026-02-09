@@ -4,6 +4,7 @@ import { Building2 } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { createClient } from "@/lib/supabase/server"
+import { ScrollAnimation, StaggerContainer, StaggerItem } from "@/components/animations/scroll-animations"
 
 export const metadata: Metadata = {
   title: "Projects",
@@ -47,9 +48,10 @@ export default async function ProjectsPage() {
               </p>
             </div>
           ) : (
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <StaggerContainer className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" staggerDelay={0.1}>
               {projects.map((project) => (
-                <Link key={project.slug} href={`/projects/${project.slug}`}>
+                <StaggerItem key={project.slug}>
+                <Link href={`/projects/${project.slug}`}>
                   <Card className="group overflow-hidden transition-all hover:shadow-lg p-0">
                     {/* Image */}
                     <div className="relative aspect-square overflow-hidden bg-muted">
@@ -87,15 +89,16 @@ export default async function ProjectsPage() {
                     </CardContent>
                   </Card>
                 </Link>
+                </StaggerItem>
               ))}
-            </div>
+            </StaggerContainer>
           )}
         </div>
       </section>
 
       {/* CTA Section */}
       <section className="border-t border-border bg-muted py-24 text-foreground">
-        <div className="container mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+        <ScrollAnimation className="container mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
           <h2 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl">
             Have a Project in Mind?
           </h2>
@@ -110,7 +113,7 @@ export default async function ProjectsPage() {
               Start Your Project
             </Link>
           </div>
-        </div>
+        </ScrollAnimation>
       </section>
     </div>
   )

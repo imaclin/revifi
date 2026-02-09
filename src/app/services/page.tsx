@@ -3,10 +3,27 @@ import Link from "next/link"
 import { Building2, Paintbrush, Lightbulb, Users, ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { ScrollAnimation, StaggerContainer, StaggerItem } from "@/components/animations/scroll-animations"
 
 export const metadata: Metadata = {
-  title: "Services",
-  description: "Explore REVIFI's suite of services - from commercial building restoration to interior design mastery in Cleveland, Ohio.",
+  title: "Services | Building Restoration & Interior Design in Cleveland",
+  description: "Explore REVIFI's suite of services - commercial building restoration, interior design, project consultation, and property acquisition in Cleveland, Ohio. Expert contractors for historic renovation.",
+  keywords: [
+    "building restoration services Cleveland",
+    "interior design Cleveland Ohio",
+    "commercial renovation Cleveland",
+    "property acquisition Cleveland",
+    "construction management Cleveland",
+    "historic renovation contractor",
+  ],
+  openGraph: {
+    title: "Services | Building Restoration & Interior Design in Cleveland",
+    description: "Explore REVIFI's suite of services - commercial building restoration, interior design, project consultation, and property acquisition in Cleveland, Ohio.",
+    url: "https://revifi.com/services",
+  },
+  alternates: {
+    canonical: "https://revifi.com/services",
+  },
 }
 
 const services = [
@@ -22,6 +39,8 @@ const services = [
       "Adaptive reuse solutions",
     ],
     icon: Building2,
+    image: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=1200&auto=format&fit=crop",
+    href: "/services/commercial-building-restoration",
   },
   {
     number: "02",
@@ -35,6 +54,8 @@ const services = [
       "Art and accessory curation",
     ],
     icon: Paintbrush,
+    image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1200&auto=format&fit=crop",
+    href: "/services/interior-design",
   },
   {
     number: "03",
@@ -48,6 +69,8 @@ const services = [
       "Project management",
     ],
     icon: Lightbulb,
+    image: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=1200&auto=format&fit=crop",
+    href: "/services/project-consultation",
   },
   {
     number: "04",
@@ -61,6 +84,8 @@ const services = [
       "Closing coordination",
     ],
     icon: Users,
+    image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=1200&auto=format&fit=crop",
+    href: "/services/property-acquisition",
   },
 ]
 
@@ -81,12 +106,16 @@ export default function ServicesPage() {
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-16">
             {services.map((service, index) => (
-              <Card key={service.title} className="overflow-hidden">
+              <ScrollAnimation key={service.title} variant={index % 2 === 0 ? "slideInLeft" : "slideInRight"}>
+              <Card className="group overflow-hidden">
                 <div className={`grid lg:grid-cols-2 ${index % 2 === 1 ? 'lg:grid-flow-dense' : ''}`}>
-                  <div className={`relative aspect-[4/3] bg-muted lg:aspect-auto ${index % 2 === 1 ? 'lg:col-start-2' : ''}`}>
-                    <div className="absolute inset-0 flex items-center justify-center text-muted-foreground">
-                      <service.icon className="h-24 w-24 opacity-20" />
-                    </div>
+                  <div className={`relative aspect-[4/3] overflow-hidden bg-muted lg:aspect-auto lg:min-h-[400px] ${index % 2 === 1 ? 'lg:col-start-2' : ''}`}>
+                    <img
+                      src={service.image}
+                      alt={service.title}
+                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
                   </div>
                   <CardContent className="flex flex-col justify-center p-8 lg:p-12">
                     <p className="text-sm font-medium text-goldenrod dark:text-[#fbbf24]">
@@ -102,9 +131,18 @@ export default function ServicesPage() {
                         </li>
                       ))}
                     </ul>
+                    <div className="mt-8">
+                      <Link href={service.href}>
+                        <Button variant="outline" className="gap-2">
+                          Learn More
+                          <ArrowRight className="h-4 w-4" />
+                        </Button>
+                      </Link>
+                    </div>
                   </CardContent>
                 </div>
               </Card>
+              </ScrollAnimation>
             ))}
           </div>
         </div>
@@ -113,7 +151,7 @@ export default function ServicesPage() {
       {/* Process CTA */}
       <section className="border-t border-border bg-background py-24">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-3xl text-center">
+          <ScrollAnimation className="mx-auto max-w-3xl text-center">
             <h2 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl">
               Our Process
             </h2>
@@ -129,13 +167,13 @@ export default function ServicesPage() {
                 </Button>
               </Link>
             </div>
-          </div>
+          </ScrollAnimation>
         </div>
       </section>
 
       {/* CTA Section */}
       <section className="bg-muted py-24 text-foreground">
-        <div className="container mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+        <ScrollAnimation className="container mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
           <h2 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl">
             Ready to Start Your Project?
           </h2>
@@ -152,7 +190,7 @@ export default function ServicesPage() {
               </Button>
             </Link>
           </div>
-        </div>
+        </ScrollAnimation>
       </section>
     </div>
   )

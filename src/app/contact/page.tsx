@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent } from "@/components/ui/card"
 import { toast } from "sonner"
+import { ScrollAnimation, StaggerContainer, StaggerItem } from "@/components/animations/scroll-animations"
 
 const contactInfo = [
   {
@@ -85,6 +86,7 @@ export default function ContactPage() {
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-2">
             {/* Contact Form */}
+            <ScrollAnimation variant="slideInLeft">
             <Card>
               <CardContent className="p-8">
                 <h2 className="font-serif text-2xl font-bold">Send Us a Message</h2>
@@ -161,8 +163,10 @@ export default function ContactPage() {
                 </form>
               </CardContent>
             </Card>
+            </ScrollAnimation>
 
             {/* Contact Info */}
+            <ScrollAnimation variant="slideInRight">
             <div className="flex flex-col justify-center space-y-8">
               <div>
                 <h2 className="font-serif text-2xl font-bold">Get in Touch</h2>
@@ -212,6 +216,7 @@ export default function ContactPage() {
                 </CardContent>
               </Card>
             </div>
+            </ScrollAnimation>
           </div>
         </div>
       </section>
