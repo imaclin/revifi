@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { User } from "@supabase/supabase-js"
@@ -21,6 +21,7 @@ import {
 } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden"
@@ -48,7 +49,23 @@ export function AdminSidebar({ user }: AdminSidebarProps) {
   const pathname = usePathname()
   const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
+  const [unreadCount, setUnreadCount] = useState(0)
   const adminPath = useAdminPath()
+
+  useEffect(() => {
+    const fetchUnreadCount = async () => {
+      const supabase = createClient()
+      const { count } = await supabase
+        .from("messages")
+        .select("id", { count: "exact" })
+        .eq("status", "unread")
+      setUnreadCount(count || 0)
+    }
+
+    fetchUnreadCount()
+    const interval = setInterval(fetchUnreadCount, 30000) // Refresh every 30s
+    return () => clearInterval(interval)
+  }, [])
 
   const handleSignOut = async () => {
     const supabase = createClient()
@@ -82,7 +99,12 @@ export function AdminSidebar({ user }: AdminSidebarProps) {
                 )}
               >
                 <item.icon className="h-5 w-5" />
-                {item.name}
+                <span>{item.name}</span>
+                {item.name === "Messages" && unreadCount > 0 && (
+                  <Badge className="ml-auto" variant="destructive">
+                    {unreadCount}
+                  </Badge>
+                )}
               </Link>
             )
           })}
@@ -153,7 +175,12 @@ export function AdminSidebar({ user }: AdminSidebarProps) {
                     )}
                   >
                     <item.icon className="h-5 w-5" />
-                    {item.name}
+                    <span>{item.name}</span>
+                    {item.name === "Messages" && unreadCount > 0 && (
+                      <Badge className="ml-auto" variant="destructive">
+                        {unreadCount}
+                      </Badge>
+                    )}
                   </Link>
                 )
               })}

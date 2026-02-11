@@ -263,9 +263,9 @@ export default function AdminMessagesPage() {
                 setSelectedMessage(msg)
                 if (msg.status === "unread") updateStatus(msg.id, "read")
               }}
-              className="flex w-full items-start gap-4 p-4 text-left transition-colors hover:bg-muted/50"
+              className="flex w-full items-center gap-4 p-4 text-left transition-colors hover:bg-muted/50"
             >
-              <div className="mt-1 shrink-0">
+              <div className="flex items-center justify-center shrink-0">
                 {msg.status === "unread" ? (
                   <Mail className="h-4 w-4 text-primary" />
                 ) : msg.status === "archived" ? (
@@ -276,16 +276,19 @@ export default function AdminMessagesPage() {
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-center justify-between gap-2">
-                  <span className={`truncate text-sm ${msg.status === "unread" ? "font-bold" : "font-medium"}`}>
-                    {msg.name}
-                  </span>
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span className={`truncate text-sm ${msg.status === "unread" ? "font-bold" : "font-medium"}`}>
+                      {msg.name}
+                    </span>
+                    <span className="text-muted-foreground">-</span>
+                    <span className={`truncate text-sm ${msg.status === "unread" ? "font-semibold" : "font-medium"}`}>
+                      {msg.subject}
+                    </span>
+                  </div>
                   <span className="shrink-0 text-xs text-muted-foreground">
                     {formatDate(msg.created_at)}
                   </span>
                 </div>
-                <p className={`truncate text-sm ${msg.status === "unread" ? "font-semibold" : ""}`}>
-                  {msg.subject}
-                </p>
                 <p className="truncate text-xs text-muted-foreground">
                   {msg.message}
                 </p>
