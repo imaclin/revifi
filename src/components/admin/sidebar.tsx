@@ -10,6 +10,7 @@ import {
   ClipboardList,
   Image,
   Users,
+  MessageSquareQuote,
   Settings,
   LogOut,
   Home,
@@ -30,6 +31,7 @@ const navigation = [
   { name: "Tasks", href: "/admin/tasks", icon: ClipboardList },
   { name: "Media", href: "/admin/media", icon: Image },
   { name: "Team", href: "/admin/team", icon: Users },
+  { name: "Testimonials", href: "/admin/testimonials", icon: MessageSquareQuote },
   { name: "Settings", href: "/admin/settings", icon: Settings },
 ]
 

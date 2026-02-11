@@ -15,14 +15,24 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "REVIFI | Historic Building Rehabilitation in Cleveland",
+    default: "REVIFI | Ohio Historic Building Renovations & Property Management",
     template: "%s | REVIFI",
   },
   description:
-    "Revitalizing the great buildings of yesterday for a better tomorrow. REVIFI specializes in historic building rehabilitation and community-centric real estate development in Cleveland, Ohio.",
+    "Ohio's premier historic building renovation and property management company. Specializing in tax abatements, property sales, historic remodeling, and commercial renovations across Cleveland, Columbus, Cincinnati, and all of Ohio.",
   keywords: [
+    "Ohio renovations",
+    "Ohio historic building renovation",
+    "property management Ohio",
+    "selling properties Ohio",
+    "tax abatements Ohio",
+    "historic building remodeling Ohio",
+    "Ohio real estate development",
+    "commercial renovation Ohio",
+    "Cleveland renovations",
+    "Columbus renovations",
+    "Cincinnati renovations",
     "historic building restoration",
-    "Cleveland real estate",
     "building rehabilitation",
     "commercial restoration",
     "interior design",
@@ -43,9 +53,9 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://revifi.com",
     siteName: "REVIFI",
-    title: "REVIFI | Historic Building Rehabilitation in Cleveland",
+    title: "REVIFI | Ohio Historic Building Renovations & Property Management",
     description:
-      "Revitalizing the great buildings of yesterday for a better tomorrow.",
+      "Ohio's premier historic building renovation and property management company. Specializing in tax abatements, property sales, and historic remodeling across Ohio.",
     images: [
       {
         url: "/revifi-icon.png",

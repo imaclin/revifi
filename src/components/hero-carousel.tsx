@@ -5,6 +5,7 @@ import Link from "next/link"
 import { ArrowRight, Building2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
+import { RotatingText } from "@/components/rotating-text"
 
 interface Project {
   id: string
@@ -57,8 +58,8 @@ export function HeroCarousel({ projects }: HeroCarouselProps) {
         <div className="order-2 mb-4 lg:hidden">
           <h1 className="font-serif text-2xl font-bold leading-tight tracking-tight text-foreground sm:text-3xl md:text-4xl">
             Building a better future through{" "}
-            <span className="italic text-muted-foreground">community-centric</span>{" "}
-            development
+            <RotatingText className="italic text-muted-foreground" />{" "}
+            development and project management
           </h1>
         </div>
 
@@ -171,7 +172,7 @@ export function HeroCarousel({ projects }: HeroCarouselProps) {
           </div>
           <h1 className="mb-4 font-serif text-2xl font-bold leading-tight tracking-tight text-foreground sm:text-3xl md:text-4xl lg:mb-6 lg:text-3xl xl:text-4xl">
             Building a better future through{" "}
-            <span className="italic text-muted-foreground">community-centric</span>{" "}
+            <RotatingText className="italic text-muted-foreground" />{" "}
             development
           </h1>
           <p className="mb-6 text-base text-muted-foreground sm:text-lg lg:mb-8">

@@ -6,6 +6,7 @@ import { HeroCarousel } from "@/components/hero-carousel"
 import { createClient } from "@/lib/supabase/server"
 import { ScrollAnimation, StaggerContainer, StaggerItem } from "@/components/animations/scroll-animations"
 import { BeforeAfterSlider } from "@/components/before-after-slider"
+import { ScrollingTestimonials } from "@/components/scrolling-testimonials"
 
 const services = [
   {
@@ -27,24 +28,6 @@ const services = [
     title: "Effortless Acquisition",
     description: "Seamless property acquisition and development services.",
     icon: Users,
-  },
-]
-
-const testimonials = [
-  {
-    content: "REVIFI transformed our house into a contemporary haven. The attention to detail, from sleek architectural lines to curated interiors, exceeded our expectations.",
-    author: "Sarah J.",
-    role: "Modern Residence Owner",
-  },
-  {
-    content: "REVIFI seamlessly blended elegance and functionality in designing our office. Their innovative approach created an environment that not only impresses clients but also fosters a productive work atmosphere.",
-    author: "Robert M.",
-    role: "Commercial Space Owner",
-  },
-  {
-    content: "Preserving the charm of our heritage home was a delicate task, and REVIFI handled it with finesse. They masterfully combined modern amenities while respecting the historical elements.",
-    author: "Alex & Mia",
-    role: "Heritage Home Restorers",
   },
 ]
 
@@ -72,6 +55,12 @@ export default async function Home() {
     || "https://a0.muscache.com/im/pictures/miso/Hosting-1216698124792854681/original/52034d96-99fc-4a0f-9bff-90c6f573573b.jpeg?im_w=1200"
 
   // Fallback to any published projects if no featured ones
+  // Fetch testimonials
+  const { data: testimonials } = await supabase
+    .from("testimonials")
+    .select("id, client_name, role, content, photo_url, rating")
+    .order("sort_order", { ascending: true })
+
   let projects = heroProjects || []
   if (projects.length === 0) {
     const { data: fallbackProjects } = await supabase
@@ -235,23 +224,9 @@ export default async function Home() {
               What Our Clients Say
             </h2>
           </ScrollAnimation>
-          <StaggerContainer className="mt-12 grid gap-8 md:grid-cols-3" staggerDelay={0.15}>
-            {testimonials.map((testimonial) => (
-              <StaggerItem key={testimonial.author}>
-              <Card className="h-full">
-                <CardContent className="flex h-full flex-col p-6">
-                  <blockquote className="flex-1 text-muted-foreground">
-                    &ldquo;{testimonial.content}&rdquo;
-                  </blockquote>
-                  <div className="mt-6 border-t border-border pt-6">
-                    <p className="font-semibold">{testimonial.author}</p>
-                    <p className="text-sm text-muted-foreground">{testimonial.role}</p>
-                  </div>
-                </CardContent>
-              </Card>
-              </StaggerItem>
-            ))}
-          </StaggerContainer>
+        </div>
+        <div className="mt-12">
+          <ScrollingTestimonials testimonials={testimonials || []} />
         </div>
       </section>
 
