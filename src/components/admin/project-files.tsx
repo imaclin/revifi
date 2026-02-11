@@ -21,7 +21,15 @@ import {
   FileSpreadsheet,
   File,
   Presentation,
+  Eye,
+  X,
 } from "lucide-react"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 import { toast } from "sonner"
 import { cn } from "@/lib/utils"
 
@@ -74,6 +82,8 @@ export function ProjectFiles({ projectId }: ProjectFilesProps) {
   const [isUploading, setIsUploading] = useState(false)
   const [dragActive, setDragActive] = useState(false)
   const [deletingFile, setDeletingFile] = useState<ProjectFile | null>(null)
+  const [previewFile, setPreviewFile] = useState<ProjectFile | null>(null)
+  const [textContent, setTextContent] = useState<string | null>(null)
 
   const fetchFiles = useCallback(async () => {
     const supabase = createClient()
@@ -91,6 +101,37 @@ export function ProjectFiles({ projectId }: ProjectFilesProps) {
   useEffect(() => {
     fetchFiles()
   }, [fetchFiles])
+
+  const getPreviewType = (file: ProjectFile): "pdf" | "image" | "office" | "text" | "none" => {
+    const mime = file.file_type || ""
+    const ext = file.name.split(".").pop()?.toLowerCase() || ""
+    if (mime.includes("pdf") || ext === "pdf") return "pdf"
+    if (mime.startsWith("image/")) return "image"
+    if (mime.includes("text") || ["txt", "csv", "json", "md", "log"].includes(ext)) return "text"
+    if (
+      mime.includes("word") || mime.includes("document") ||
+      mime.includes("spreadsheet") || mime.includes("excel") ||
+      mime.includes("presentation") || mime.includes("powerpoint") ||
+      ["doc", "docx", "xls", "xlsx", "ppt", "pptx"].includes(ext)
+    ) return "office"
+    return "none"
+  }
+
+  const handlePreview = async (file: ProjectFile) => {
+    const type = getPreviewType(file)
+    if (type === "text") {
+      try {
+        const res = await fetch(file.url)
+        const text = await res.text()
+        setTextContent(text)
+      } catch {
+        setTextContent("Failed to load file content.")
+      }
+    } else {
+      setTextContent(null)
+    }
+    setPreviewFile(file)
+  }
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault()
@@ -235,7 +276,8 @@ export function ProjectFiles({ projectId }: ProjectFilesProps) {
               return (
                 <div
                   key={file.id}
-                  className="group flex items-center gap-3 rounded-lg border px-3 py-2 transition-colors hover:border-foreground/20"
+                  className="group flex items-center gap-3 rounded-lg border px-3 py-2 cursor-pointer transition-colors hover:border-foreground/20"
+                  onClick={() => handlePreview(file)}
                 >
                   <Icon className={cn("h-5 w-5 shrink-0", color)} />
                   <div className="min-w-0 flex-1">
@@ -249,7 +291,16 @@ export function ProjectFiles({ projectId }: ProjectFilesProps) {
                       variant="ghost"
                       size="icon"
                       className="h-7 w-7"
+                      onClick={(e) => { e.stopPropagation(); handlePreview(file) }}
+                    >
+                      <Eye className="h-3.5 w-3.5" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-7 w-7"
                       asChild
+                      onClick={(e) => e.stopPropagation()}
                     >
                       <a href={file.url} target="_blank" rel="noopener noreferrer" download={file.name}>
                         <Download className="h-3.5 w-3.5" />
@@ -259,7 +310,7 @@ export function ProjectFiles({ projectId }: ProjectFilesProps) {
                       variant="ghost"
                       size="icon"
                       className="h-7 w-7 text-destructive hover:text-destructive"
-                      onClick={() => setDeletingFile(file)}
+                      onClick={(e) => { e.stopPropagation(); setDeletingFile(file) }}
                     >
                       <Trash2 className="h-3.5 w-3.5" />
                     </Button>
@@ -270,6 +321,80 @@ export function ProjectFiles({ projectId }: ProjectFilesProps) {
           </div>
         )}
       </div>
+
+      {/* Preview Modal */}
+      <Dialog open={!!previewFile} onOpenChange={(v) => { if (!v) { setPreviewFile(null); setTextContent(null) } }}>
+        <DialogContent className="max-w-4xl h-[85vh] flex flex-col p-0 gap-0">
+          <DialogHeader className="px-6 py-4 border-b shrink-0">
+            <div className="flex items-center justify-between pr-8">
+              <DialogTitle className="truncate text-sm font-medium">
+                {previewFile?.name}
+              </DialogTitle>
+              <div className="flex items-center gap-2 shrink-0">
+                <Button variant="outline" size="sm" className="gap-1.5" asChild>
+                  <a href={previewFile?.url} target="_blank" rel="noopener noreferrer" download={previewFile?.name}>
+                    <Download className="h-3.5 w-3.5" />
+                    Download
+                  </a>
+                </Button>
+              </div>
+            </div>
+          </DialogHeader>
+          <div className="flex-1 overflow-auto">
+            {previewFile && (() => {
+              const type = getPreviewType(previewFile)
+              if (type === "pdf") {
+                return (
+                  <iframe
+                    src={`${previewFile.url}#toolbar=0&navpanes=0&scrollbar=1`}
+                    className="h-full w-full"
+                    title={previewFile.name}
+                  />
+                )
+              }
+              if (type === "image") {
+                return (
+                  <div className="flex items-center justify-center p-6 h-full">
+                    <img
+                      src={previewFile.url}
+                      alt={previewFile.name}
+                      className="max-h-full max-w-full object-contain rounded"
+                    />
+                  </div>
+                )
+              }
+              if (type === "text") {
+                return (
+                  <pre className="p-6 text-sm whitespace-pre-wrap break-words font-mono text-foreground">
+                    {textContent ?? "Loading..."}
+                  </pre>
+                )
+              }
+              if (type === "office") {
+                return (
+                  <iframe
+                    src={`https://docs.google.com/gview?url=${encodeURIComponent(previewFile.url)}&embedded=true`}
+                    className="h-full w-full"
+                    title={previewFile.name}
+                  />
+                )
+              }
+              return (
+                <div className="flex flex-col items-center justify-center h-full gap-4 p-6">
+                  <File className="h-16 w-16 text-muted-foreground/30" />
+                  <p className="text-sm text-muted-foreground">Preview not available for this file type</p>
+                  <Button asChild>
+                    <a href={previewFile.url} target="_blank" rel="noopener noreferrer" download={previewFile.name}>
+                      <Download className="h-4 w-4 mr-2" />
+                      Download File
+                    </a>
+                  </Button>
+                </div>
+              )
+            })()}
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Delete Confirmation */}
       <AlertDialog open={!!deletingFile} onOpenChange={(v) => !v && setDeletingFile(null)}>
