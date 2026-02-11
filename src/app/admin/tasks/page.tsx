@@ -138,9 +138,9 @@ export default function TasksPage() {
                   className="group cursor-pointer transition-all hover:border-foreground/20"
                   onClick={() => handleClick(project.id)}
                 >
-                  <CardContent className="flex items-center gap-4 p-4">
+                  <CardContent className="flex items-center gap-3 px-3 -my-1">
                     {/* Property thumbnail */}
-                    <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-md bg-muted">
+                    <div className="relative h-8 w-8 shrink-0 overflow-hidden rounded-md bg-muted">
                       {project.featured_image_url ? (
                         <img
                           src={project.featured_image_url}
@@ -149,7 +149,7 @@ export default function TasksPage() {
                         />
                       ) : (
                         <div className="flex h-full items-center justify-center">
-                          <Building2 className="h-5 w-5 text-muted-foreground/30" />
+                          <Building2 className="h-4 w-4 text-muted-foreground/30" />
                         </div>
                       )}
                     </div>
@@ -168,43 +168,15 @@ export default function TasksPage() {
                       {project.location && (
                         <p className="text-xs text-muted-foreground">{project.location}</p>
                       )}
-
-                      {/* Progress */}
-                      <div className="mt-1.5 flex items-center gap-3">
-                        {total > 0 ? (
-                          <>
-                            <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                              <CheckCircle2 className="h-3 w-3" />
-                              {completed}/{total}
-                            </div>
-                            <div className="h-1.5 w-20 overflow-hidden rounded-full bg-muted">
-                              <div
-                                className={cn(
-                                  "h-full rounded-full transition-all duration-500",
-                                  progress === 100
-                                    ? "bg-green-500 dark:bg-green-400"
-                                    : progress > 0
-                                    ? "bg-blue-500 dark:bg-blue-400"
-                                    : "bg-muted-foreground/20"
-                                )}
-                                style={{ width: `${progress}%` }}
-                              />
-                            </div>
-                            <span className={cn(
-                              "text-xs font-medium",
-                              progress === 100 ? "text-green-600 dark:text-green-400" : "text-muted-foreground"
-                            )}>
-                              {progress}%
-                            </span>
-                          </>
-                        ) : (
-                          <p className="flex items-center gap-1 text-xs text-muted-foreground">
-                            <Clock className="h-3 w-3" />
-                            No tasks yet
-                          </p>
-                        )}
-                      </div>
                     </div>
+
+                    {/* Task count */}
+                    {total > 0 && (
+                      <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                        <CheckCircle2 className="h-3 w-3" />
+                        {completed}/{total}
+                      </span>
+                    )}
 
                     {/* Arrow indicator */}
                     <div className="text-muted-foreground/40 group-hover:text-muted-foreground">
