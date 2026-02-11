@@ -7,8 +7,9 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Save, Plus, X, Upload, LinkIcon, GripVertical } from "lucide-react"
+import { Save, Plus, X, Upload, LinkIcon, GripVertical, ChevronDown } from "lucide-react"
 import { toast } from "sonner"
+import { getIcon } from "@/lib/icons"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -35,6 +36,45 @@ interface ProcessStep {
   description: string
   icon: string
   bg_image: string
+}
+
+function IconPicker({ value, onChange }: { value: string; onChange: (val: string) => void }) {
+  const [open, setOpen] = useState(false)
+  const SelectedIcon = getIcon(value)
+
+  return (
+    <div className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen(!open)}
+        className="flex h-9 w-full items-center justify-between rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs"
+      >
+        <span className="flex items-center gap-2">
+          <SelectedIcon className="h-4 w-4" />
+          {value}
+        </span>
+        <ChevronDown className="h-4 w-4 text-muted-foreground" />
+      </button>
+      {open && (
+        <div className="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-md border bg-popover p-1 shadow-md">
+          {ICON_OPTIONS.map((iconName) => {
+            const Icon = getIcon(iconName)
+            return (
+              <button
+                key={iconName}
+                type="button"
+                onClick={() => { onChange(iconName); setOpen(false) }}
+                className={`flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm hover:bg-accent ${value === iconName ? "bg-accent font-medium" : ""}`}
+              >
+                <Icon className="h-4 w-4" />
+                {iconName}
+              </button>
+            )
+          })}
+        </div>
+      )}
+    </div>
+  )
 }
 
 export default function AdminAboutPage() {
@@ -289,15 +329,10 @@ export default function AdminAboutPage() {
                 </div>
                 <div className="space-y-2">
                   <Label>Icon</Label>
-                  <select
+                  <IconPicker
                     value={step.icon}
-                    onChange={(e) => updateStep(index, "icon", e.target.value)}
-                    className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-xs"
-                  >
-                    {ICON_OPTIONS.map((icon) => (
-                      <option key={icon} value={icon}>{icon}</option>
-                    ))}
-                  </select>
+                    onChange={(val) => updateStep(index, "icon", val)}
+                  />
                 </div>
               </div>
 

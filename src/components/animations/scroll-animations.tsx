@@ -59,7 +59,7 @@ export function ScrollAnimation({
     <motion.div
       initial="hidden"
       whileInView="visible"
-      viewport={{ once, margin: "-80px" }}
+      viewport={{ once, amount: 0.05 }}
       variants={variantMap[variant]}
       transition={{
         duration,
@@ -90,7 +90,7 @@ export function StaggerContainer({
     <motion.div
       initial="hidden"
       whileInView="visible"
-      viewport={{ once, margin: "-80px" }}
+      viewport={{ once, amount: 0.05 }}
       variants={{
         hidden: {},
         visible: {

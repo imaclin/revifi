@@ -71,7 +71,7 @@ export default async function AboutPage() {
               const IconComponent = getIcon(item.icon)
               return (
               <StaggerItem key={item.step_number}>
-              <Card className="relative overflow-hidden">
+              <Card className="relative overflow-hidden h-[280px]">
                 {item.bg_image && (
                   <div className="absolute inset-0 opacity-[0.08]">
                     <img
@@ -82,7 +82,7 @@ export default async function AboutPage() {
                   </div>
                 )}
                 <CardContent className="relative p-6">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-muted">
+                  <div className="flex h-12 w-12 items-center justify-center">
                     <IconComponent className="h-6 w-6" />
                   </div>
                   <p className="mt-4 text-sm font-medium text-goldenrod dark:text-[#fbbf24]">
