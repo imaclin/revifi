@@ -16,6 +16,13 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Upload, Trash2, Image as ImageIcon, GripVertical, Star } from "lucide-react"
 import { toast } from "sonner"
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs"
+import { ProjectFiles } from "@/components/admin/project-files"
 
 interface ProjectMediaProps {
   projectId?: string
@@ -234,9 +241,16 @@ export function ProjectMedia({ projectId, media, onMediaChange }: ProjectMediaPr
     <>
     <Card>
       <CardHeader>
-        <CardTitle>Project Media</CardTitle>
+        <CardTitle>Project Assets</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent>
+      <Tabs defaultValue="media" className="space-y-4">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="media">Media</TabsTrigger>
+          <TabsTrigger value="files">Files</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="media" className="space-y-6">
         {/* Upload Area */}
         <div
           className={`relative flex min-h-[150px] cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed transition-colors ${
@@ -336,6 +350,18 @@ export function ProjectMedia({ projectId, media, onMediaChange }: ProjectMediaPr
             </p>
           </div>
         )}
+        </TabsContent>
+
+        <TabsContent value="files">
+          {projectId ? (
+            <ProjectFiles projectId={projectId} />
+          ) : (
+            <div className="py-8 text-center text-sm text-muted-foreground">
+              Save the project first to upload files.
+            </div>
+          )}
+        </TabsContent>
+      </Tabs>
       </CardContent>
     </Card>
 
