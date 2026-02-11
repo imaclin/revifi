@@ -30,7 +30,11 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "REVIFI" }],
   icons: {
-    icon: "/revifi-icon.png",
+    icon: [
+      { url: "/revifi-icon.png", sizes: "32x32", type: "image/png" },
+      { url: "/revifi-icon.png", sizes: "16x16", type: "image/png" },
+      { url: "/revifi-icon.png", sizes: "192x192", type: "image/png" },
+    ],
     shortcut: "/revifi-icon.png",
     apple: "/revifi-icon.png",
   },
