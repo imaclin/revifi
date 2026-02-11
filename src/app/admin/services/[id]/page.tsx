@@ -463,11 +463,12 @@ export default function AdminServiceEditPage() {
                   </label>
                 </div>
                 {service.home_bg_image && (
-                  <div className="relative mt-2 h-32 w-full overflow-hidden rounded-lg bg-muted">
+                  <div className="relative mt-2 w-full overflow-hidden rounded-lg border bg-muted">
                     <img
                       src={service.home_bg_image}
                       alt="Background preview"
-                      className="h-full w-full object-cover"
+                      className="w-full object-contain"
+                      style={{ maxHeight: '240px' }}
                     />
                   </div>
                 )}
@@ -525,11 +526,12 @@ export default function AdminServiceEditPage() {
                   </label>
                 </div>
                 {service.services_image && (
-                  <div className="relative mt-2 h-48 w-full overflow-hidden rounded-lg bg-muted">
+                  <div className="relative mt-2 w-full overflow-hidden rounded-lg border bg-muted">
                     <img
                       src={service.services_image}
                       alt="Service image preview"
-                      className="h-full w-full object-cover"
+                      className="w-full object-contain"
+                      style={{ maxHeight: '300px' }}
                     />
                   </div>
                 )}

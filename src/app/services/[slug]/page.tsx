@@ -24,6 +24,7 @@ interface ServiceData {
   home_title: string
   services_title: string
   services_description: string
+  services_image: string | null
   detail_hero_description: string | null
   detail_benefits: Benefit[]
   detail_faqs: FAQ[]
@@ -149,8 +150,17 @@ export default async function ServiceDetailPage({
 
       {/* Benefits Grid */}
       {benefits.length > 0 && (
-        <section className="border-t border-border bg-muted/30 py-24">
-          <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <section className="relative border-t border-border bg-muted/30 py-24 overflow-hidden">
+          {service.services_image && (
+            <div className="absolute inset-0 opacity-[0.2]">
+              <img
+                src={service.services_image}
+                alt=""
+                className="h-full w-full object-cover "
+              />
+            </div>
+          )}
+          <div className="container relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <h2 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl">
               What We Deliver
             </h2>
@@ -199,29 +209,7 @@ export default async function ServiceDetailPage({
       )}
 
       {/* CTA */}
-      {service.detail_cta_title ? (
-        <section className="bg-muted py-24 text-foreground">
-          <div className="container mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
-            <h2 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl">
-              {service.detail_cta_title}
-            </h2>
-            {service.detail_cta_description && (
-              <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
-                {service.detail_cta_description}
-              </p>
-            )}
-            <div className="mt-8">
-              <Link href="/contact">
-                <Button size="lg" variant="outline">
-                  Start Your Project
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </section>
-      ) : (
-        <ContactCTA />
-      )}
+      <ContactCTA />
     </div>
   )
 }

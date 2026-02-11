@@ -15,7 +15,7 @@ export async function middleware(request: NextRequest) {
   // On admin subdomain: rewrite paths to /admin/* so URLs stay clean
   // e.g. admin.revifi.com/projects -> serves /admin/projects
   if (isAdminSubdomain && !pathname.startsWith('/admin') && !pathname.startsWith('/login') && !pathname.startsWith('/api') && !pathname.startsWith('/_next')) {
-    const adminRoutes = ['/projects', '/services', '/tasks', '/media', '/team', '/testimonials', '/settings']
+    const adminRoutes = ['/projects', '/services', '/about', '/tasks', '/media', '/team', '/testimonials', '/settings']
     const isAdminRoute = pathname === '/' || adminRoutes.some(route => pathname === route || pathname.startsWith(route + '/'))
 
     if (isAdminRoute) {

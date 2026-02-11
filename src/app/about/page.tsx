@@ -1,65 +1,36 @@
 import { Metadata } from "next"
 import Link from "next/link"
-import { ArrowRight, Search, Lightbulb, PenTool, Hammer, Sparkles, Gift } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { ScrollAnimation, StaggerContainer, StaggerItem } from "@/components/animations/scroll-animations"
 import { createClient } from "@/lib/supabase/server"
 import { ContactCTA } from "@/components/contact-cta"
+import { getIcon } from "@/lib/icons"
 
 export const metadata: Metadata = {
   title: "About",
   description: "Learn about REVIFI - designers and contractors specializing in the revitalization of old properties in Cleveland, Ohio.",
 }
 
-const process = [
-  {
-    step: "01",
-    title: "Discovery and Acquisition",
-    description: "Begin your design journey with an in-depth consultation. We explore your aspirations, preferences, and lifestyle, ensuring that every detail aligns with your unique vision.",
-    icon: Search,
-  },
-  {
-    step: "02",
-    title: "Conceptualization and Ideation",
-    description: "Our creative team develops innovative concepts that capture the essence of your vision while pushing the boundaries of design excellence.",
-    icon: Lightbulb,
-  },
-  {
-    step: "03",
-    title: "Design Development",
-    description: "We refine and develop the chosen concept into detailed plans, selecting materials, finishes, and fixtures that bring your vision to life.",
-    icon: PenTool,
-  },
-  {
-    step: "04",
-    title: "Implementation and Construction",
-    description: "Our skilled craftsmen execute the design with precision and care, ensuring every detail meets our exacting standards.",
-    icon: Hammer,
-  },
-  {
-    step: "05",
-    title: "Finishing Touches",
-    description: "We add the final details that transform a space from complete to extraordinary, curating every element for maximum impact.",
-    icon: Sparkles,
-  },
-  {
-    step: "06",
-    title: "Presentation and Delivery",
-    description: "Your transformed space is revealed, ready to inspire and delight for years to come.",
-    icon: Gift,
-  },
-]
-
 export default async function AboutPage() {
   const supabase = await createClient()
-  const { data: team } = await supabase
-    .from("team_members")
-    .select("*")
-    .eq("active", true)
-    .order("sort_order", { ascending: true })
 
-  const teamMembers = team || []
+  const [teamRes, stepsRes, contentRes] = await Promise.all([
+    supabase.from("team_members").select("*").eq("active", true).order("sort_order", { ascending: true }),
+    supabase.from("about_process_steps").select("*").order("sort_order", { ascending: true }),
+    supabase.from("about_content").select("*"),
+  ])
+
+  const teamMembers = teamRes.data || []
+  const processSteps = stepsRes.data || []
+  const content = contentRes.data || []
+
+  const intro1 = content.find((c: any) => c.key === "intro_paragraph_1")?.value
+    || "At REVIFI, we don't just design spaces; we tell stories."
+  const intro2 = content.find((c: any) => c.key === "intro_paragraph_2")?.value
+    || "Our comprehensive start-to-finish approach sets us apart."
+
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
@@ -85,14 +56,10 @@ export default async function AboutPage() {
           <ScrollAnimation>
           <div className="mb-8">
             <p className="text-lg text-muted-foreground">
-              At REVIFI, we don&apos;t just design spaces; we tell stories. Our journey is rooted 
-              in a passion for architectural innovation and interior design mastery. With a 
-              commitment to excellence, we transform your dreams into sophisticated, functional, 
-              and timeless realities.
+              {intro1}
             </p>
             <p className="mt-4 text-lg text-muted-foreground">
-              Our comprehensive start-to-finish approach sets us apart from many other 
-              investment companies and design firms, ensuring unparalleled dedication to every project.
+              {intro2}
             </p>
             <h2 className="font-serif text-4xl font-bold tracking-tight sm:text-5xl mt-8">
               Our Process
@@ -100,15 +67,26 @@ export default async function AboutPage() {
           </div>
           </ScrollAnimation>
           <StaggerContainer className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3" staggerDelay={0.1}>
-            {process.map((item) => (
-              <StaggerItem key={item.step}>
+            {processSteps.map((item: any) => {
+              const IconComponent = getIcon(item.icon)
+              return (
+              <StaggerItem key={item.step_number}>
               <Card className="relative overflow-hidden">
-                <CardContent className="p-6">
+                {item.bg_image && (
+                  <div className="absolute inset-0 opacity-[0.08]">
+                    <img
+                      src={item.bg_image}
+                      alt=""
+                      className="h-full w-full object-cover filter grayscale"
+                    />
+                  </div>
+                )}
+                <CardContent className="relative p-6">
                   <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-muted">
-                    <item.icon className="h-6 w-6" />
+                    <IconComponent className="h-6 w-6" />
                   </div>
                   <p className="mt-4 text-sm font-medium text-goldenrod dark:text-[#fbbf24]">
-                    {item.step}
+                    {item.step_number}
                   </p>
                   <h3 className="mt-2 font-serif text-xl font-semibold">
                     {item.title}
@@ -119,7 +97,8 @@ export default async function AboutPage() {
                 </CardContent>
               </Card>
               </StaggerItem>
-            ))}
+              )
+            })}
           </StaggerContainer>
         </div>
       </section>

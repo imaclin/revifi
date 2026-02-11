@@ -12,6 +12,7 @@ import {
   Users,
   MessageSquareQuote,
   Wrench,
+  FileText,
   Settings,
   LogOut,
   Home,
@@ -29,6 +30,7 @@ import { useAdminPath } from "@/hooks/use-admin-path"
 const navigation = [
   { name: "Projects", href: "/admin/projects", icon: FolderKanban },
   { name: "Services", href: "/admin/services", icon: Wrench },
+  { name: "About", href: "/admin/about", icon: FileText },
   { name: "Tasks", href: "/admin/tasks", icon: ClipboardList },
   { name: "Media", href: "/admin/media", icon: Image },
   { name: "Team", href: "/admin/team", icon: Users },

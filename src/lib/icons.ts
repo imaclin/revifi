@@ -15,6 +15,7 @@ import {
   Layers,
   Search,
   Star,
+  Gift,
   type LucideIcon,
 } from "lucide-react"
 
@@ -35,6 +36,7 @@ const iconMap: Record<string, LucideIcon> = {
   Layers,
   Search,
   Star,
+  Gift,
 }
 
 export function getIcon(name: string): LucideIcon {
