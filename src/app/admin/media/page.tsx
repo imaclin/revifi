@@ -25,6 +25,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
+import { BeforeAfterUpload } from "@/components/admin/before-after-upload"
 
 export default function MediaPage() {
   const [media, setMedia] = useState<any[]>([])
@@ -233,6 +234,9 @@ export default function MediaPage() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Before & After Slider */}
+      <BeforeAfterUpload />
 
       {/* Media Grid */}
       <div>
