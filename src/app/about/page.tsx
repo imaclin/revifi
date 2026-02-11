@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { ScrollAnimation, StaggerContainer, StaggerItem } from "@/components/animations/scroll-animations"
 import { createClient } from "@/lib/supabase/server"
+import { ContactCTA } from "@/components/contact-cta"
 
 export const metadata: Metadata = {
   title: "About",
@@ -164,26 +165,7 @@ export default async function AboutPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-muted py-24 text-foreground">
-        <ScrollAnimation className="container mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
-          <h2 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl">
-            Let&apos;s Get in Touch
-          </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
-            Ready to transform your space? Contact us to discuss your next project.
-          </p>
-          <div className="mt-8">
-            <Link href="/contact">
-              <Button
-                size="lg"
-                variant="outline"
-              >
-                Build With Us
-              </Button>
-            </Link>
-          </div>
-        </ScrollAnimation>
-      </section>
+      <ContactCTA />
     </div>
   )
 }

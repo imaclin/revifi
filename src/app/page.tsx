@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ArrowRight, Building2, Paintbrush, Users, Lightbulb } from "lucide-react"
+import { ArrowRight, Building2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { HeroCarousel } from "@/components/hero-carousel"
@@ -7,29 +7,8 @@ import { createClient } from "@/lib/supabase/server"
 import { ScrollAnimation, StaggerContainer, StaggerItem } from "@/components/animations/scroll-animations"
 import { BeforeAfterSlider } from "@/components/before-after-slider"
 import { ScrollingTestimonials } from "@/components/scrolling-testimonials"
-
-const services = [
-  {
-    title: "Commercial Building Restoration",
-    description: "Transform your vision into reality with our expert restoration services.",
-    icon: Building2,
-  },
-  {
-    title: "Interior Design Mastery",
-    description: "Curated interiors that blend elegance with functionality.",
-    icon: Paintbrush,
-  },
-  {
-    title: "Project Consultation",
-    description: "Expert guidance from concept to completion.",
-    icon: Lightbulb,
-  },
-  {
-    title: "Effortless Acquisition",
-    description: "Seamless property acquisition and development services.",
-    icon: Users,
-  },
-]
+import { ContactCTA } from "@/components/contact-cta"
+import { getIcon } from "@/lib/icons"
 
 export default async function Home() {
   const supabase = await createClient()
@@ -61,6 +40,12 @@ export default async function Home() {
     .select("id, client_name, role, content, photo_url, rating")
     .order("sort_order", { ascending: true })
 
+  // Fetch services
+  const { data: services } = await supabase
+    .from("services")
+    .select("slug, home_title, home_description, home_icon, home_bg_image")
+    .order("sort_order", { ascending: true })
+
   let projects = heroProjects || []
   if (projects.length === 0) {
     const { data: fallbackProjects } = await supabase
@@ -81,7 +66,16 @@ export default async function Home() {
       <section className="border-t border-border bg-background py-24">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
-            <ScrollAnimation variant="slideInLeft" className="flex flex-col justify-center">
+            <ScrollAnimation variant="slideInLeft">
+              <BeforeAfterSlider
+                beforeImage={beforeImage}
+                afterImage={afterImage}
+                beforeLabel="Before"
+                afterLabel="After"
+                className="aspect-[4/3]"
+              />
+            </ScrollAnimation>
+            <ScrollAnimation variant="slideInRight" className="flex flex-col justify-center">
               <p className="text-sm font-medium uppercase tracking-widest text-muted-foreground">
                 About Us
               </p>
@@ -102,15 +96,6 @@ export default async function Home() {
                   </Button>
                 </Link>
               </div>
-            </ScrollAnimation>
-            <ScrollAnimation variant="slideInRight">
-              <BeforeAfterSlider
-                beforeImage={beforeImage}
-                afterImage={afterImage}
-                beforeLabel="Before"
-                afterLabel="After"
-                className="aspect-[4/3]"
-              />
             </ScrollAnimation>
           </div>
         </div>
@@ -189,26 +174,39 @@ export default async function Home() {
             </p>
           </ScrollAnimation>
           <StaggerContainer className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4" staggerDelay={0.1}>
-            {services.map((service, index) => (
-              <StaggerItem key={service.title}>
-              <Card className="relative overflow-hidden">
-                <CardContent className="p-6">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-muted">
-                    <service.icon className="h-6 w-6" />
+            {(services || []).map((service, index) => {
+              const IconComponent = getIcon(service.home_icon)
+              return (
+              <StaggerItem key={service.slug}>
+              <Card className="relative overflow-hidden h-[240px]">
+                {/* Background Image */}
+                {service.home_bg_image && (
+                  <div className="absolute inset-0 opacity-[0.08]">
+                    <img
+                      src={service.home_bg_image}
+                      alt=""
+                      className="h-full w-full object-cover filter grayscale"
+                    />
                   </div>
-                  <p className="mt-4 text-sm font-medium text-goldenrod dark:text-[#fbbf24]">
+                )}
+                <CardContent className="relative p-4">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted">
+                    <IconComponent className="h-5 w-5" />
+                  </div>
+                  <p className="mt-2 text-sm font-medium text-goldenrod dark:text-[#fbbf24]">
                     0{index + 1}
                   </p>
-                  <h3 className="mt-2 font-serif text-lg font-semibold">
-                    {service.title}
+                  <h3 className="mt-1 font-serif text-lg font-semibold">
+                    {service.home_title}
                   </h3>
-                  <p className="mt-2 text-sm text-muted-foreground">
-                    {service.description}
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    {service.home_description}
                   </p>
                 </CardContent>
               </Card>
               </StaggerItem>
-            ))}
+              )
+            })}
           </StaggerContainer>
         </div>
       </section>
@@ -231,26 +229,7 @@ export default async function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="border-t border-border bg-muted py-24 text-foreground">
-        <ScrollAnimation className="container mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
-          <h2 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl">
-            Let&apos;s Get in Touch
-          </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
-            Ready to transform your space? Contact us to discuss your next project.
-          </p>
-          <div className="mt-8">
-            <Link href="/contact">
-              <Button
-                size="lg"
-                variant="outline"
-              >
-                Build With Us
-              </Button>
-            </Link>
-          </div>
-        </ScrollAnimation>
-      </section>
+      <ContactCTA />
     </div>
   )
 }
