@@ -131,14 +131,11 @@ export default async function Home() {
                     )}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
                   </div>
-                  <CardContent className="p-6">
-                    <p className="text-sm font-medium text-muted-foreground">
-                      0{index + 1}
-                    </p>
-                    <h3 className="mt-1 font-serif text-xl font-semibold">
+                  <CardContent className="px-6 pb-6">
+                    <h3 className="font-serif text-xl font-semibold">
                       {project.title}
                     </h3>
-                    <p className="mt-1 text-sm text-muted-foreground">
+                    <p className="text-sm text-muted-foreground">
                       {project.subtitle || project.location || "View Project"}
                     </p>
                   </CardContent>

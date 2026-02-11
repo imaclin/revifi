@@ -80,8 +80,8 @@ export function AdminSidebar({ user }: AdminSidebarProps) {
   return (
     <>
       {/* Desktop sidebar - always visible */}
-      <div className="hidden lg:flex h-screen w-64 flex-col border-r border-border bg-card">
-        <nav className="flex-1 space-y-1 p-4 pt-8">
+      <div className="hidden lg:flex h-full w-64 shrink-0 flex-col border-r border-border bg-card">
+        <nav className="flex-1 overflow-y-auto space-y-1 p-4 pt-8">
           {navigation.map((item) => {
             const resolvedHref = adminPath(item.href)
             const isActive = pathname === item.href || pathname === resolvedHref ||

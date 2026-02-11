@@ -255,7 +255,7 @@ export default function AdminMessagesPage() {
           </CardContent>
         </Card>
       ) : (
-        <Card className="divide-y p-0">
+        <div className="divide-y border rounded-md">
           {messages.map((msg) => (
             <button
               key={msg.id}
@@ -263,7 +263,7 @@ export default function AdminMessagesPage() {
                 setSelectedMessage(msg)
                 if (msg.status === "unread") updateStatus(msg.id, "read")
               }}
-              className="flex w-full items-center gap-4 p-4 text-left transition-colors hover:bg-muted/50"
+              className="flex w-full items-center gap-4 py-2 px-4 text-left transition-colors hover:bg-muted/50"
             >
               <div className="flex items-center justify-center shrink-0">
                 {msg.status === "unread" ? (
@@ -295,7 +295,7 @@ export default function AdminMessagesPage() {
               </div>
             </button>
           ))}
-        </Card>
+        </div>
       )}
     </div>
   )

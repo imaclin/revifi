@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { cn } from "@/lib/utils"
 
 const phrases = [
@@ -13,32 +13,58 @@ const phrases = [
 
 export function RotatingText({ className }: { className?: string }) {
   const [index, setIndex] = useState(0)
-  const [isAnimating, setIsAnimating] = useState(false)
+  const [nextIndex, setNextIndex] = useState(0)
+  const [phase, setPhase] = useState<"idle" | "out" | "in">("idle")
+  const measureRef = useRef<HTMLSpanElement>(null)
+  const [width, setWidth] = useState<number | undefined>(undefined)
+
+  // Measure width of current phrase
+  useEffect(() => {
+    if (measureRef.current) {
+      setWidth(measureRef.current.offsetWidth)
+    }
+  }, [index])
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setIsAnimating(true)
+      const next = (index + 1) % phrases.length
+      setNextIndex(next)
+      setPhase("out")
+
       setTimeout(() => {
-        setIndex((prev) => (prev + 1) % phrases.length)
-        setIsAnimating(false)
-      }, 400)
+        setIndex(next)
+        setPhase("in")
+      }, 350)
+
+      setTimeout(() => {
+        setPhase("idle")
+      }, 700)
     }, 3000)
 
     return () => clearInterval(interval)
-  }, [])
+  }, [index])
 
   return (
-    <span className={cn("relative inline-block", className)}>
-      {/* Invisible sizer: renders the widest phrase to hold width */}
-      <span className="invisible" aria-hidden="true">
-        {phrases.reduce((a, b) => (a.length > b.length ? a : b))}
+    <span
+      className={cn("relative inline-flex overflow-hidden align-baseline", className)}
+      style={{
+        width: width ? `${width + 8}px` : "auto",
+        transition: "width 350ms ease",
+      }}
+    >
+      {/* Hidden measurer for current phrase */}
+      <span ref={measureRef} className="invisible absolute whitespace-nowrap italic" aria-hidden="true">
+        {phrases[phase === "out" ? nextIndex : index]}
       </span>
-      {/* Visible animated phrase */}
+      {/* Animated phrase */}
       <span
         className={cn(
-          "absolute left-0 top-0 transition-opacity duration-500 ease-in-out",
-          isAnimating ? "opacity-0" : "opacity-100"
+          "inline-block whitespace-nowrap transition-all duration-350 ease-in-out",
+          phase === "out" && "opacity-0 -translate-y-full",
+          phase === "in" && "opacity-0 translate-y-full",
+          phase === "idle" && "opacity-100 translate-y-0"
         )}
+        style={{ transitionDuration: "350ms" }}
       >
         {phrases[index]}
       </span>
