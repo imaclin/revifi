@@ -1,10 +1,9 @@
 import { Metadata } from "next"
 import Link from "next/link"
 import { Building2 } from "lucide-react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import { createClient } from "@/lib/supabase/server"
-import { ScrollAnimation, StaggerContainer, StaggerItem } from "@/components/animations/scroll-animations"
+import { ScrollAnimation } from "@/components/animations/scroll-animations"
+import { ProjectsViewToggle } from "@/components/projects-view-toggle"
 
 export const metadata: Metadata = {
   title: "Projects",
@@ -27,17 +26,8 @@ export default async function ProjectsPage() {
 
   return (
     <div className="flex flex-col">
-      {/* Hero Section */}
-      <section className="bg-background py-8">
-        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h1 className="font-serif text-4xl font-bold tracking-tight sm:text-5xl">
-            Our Work
-          </h1>
-        </div>
-      </section>
-
-      {/* Projects Grid */}
-      <section className="bg-background pt-4 pb-24">
+      {/* Projects */}
+      <section className="bg-background py-8 pb-24">
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {!projects || projects.length === 0 ? (
             <div className="py-12 text-center">
@@ -48,50 +38,7 @@ export default async function ProjectsPage() {
               </p>
             </div>
           ) : (
-            <StaggerContainer className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" staggerDelay={0.1}>
-              {projects.map((project) => (
-                <StaggerItem key={project.slug}>
-                <Link href={`/projects/${project.slug}`}>
-                  <Card className="group overflow-hidden transition-all hover:shadow-lg p-0">
-                    {/* Image */}
-                    <div className="relative aspect-square overflow-hidden bg-muted">
-                      {project.featured_image_url ? (
-                        <img
-                          src={project.featured_image_url}
-                          alt={project.title}
-                          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                        />
-                      ) : (
-                        <div className="flex h-full items-center justify-center text-muted-foreground">
-                          <Building2 className="h-24 w-24 opacity-20" />
-                        </div>
-                      )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-                    </div>
-                    
-                    {/* Content */}
-                    <CardContent className="p-6">
-                      <div className="mb-3 flex flex-wrap items-center gap-2">
-                        <Badge variant="outline" className="capitalize">
-                          {project.category}
-                        </Badge>
-                        <Badge variant="secondary" className="capitalize">
-                          {project.status}
-                        </Badge>
-                      </div>
-                      <h2 className="font-serif text-2xl font-bold">{project.title}</h2>
-                      <p className="mt-1 text-sm font-medium text-navy dark:text-[#3b82f6]">
-                        {project.subtitle}
-                      </p>
-                      <p className="mt-4 text-sm font-medium text-foreground underline-offset-4 group-hover:underline">
-                        View Project →
-                      </p>
-                    </CardContent>
-                  </Card>
-                </Link>
-                </StaggerItem>
-              ))}
-            </StaggerContainer>
+            <ProjectsViewToggle projects={projects} />
           )}
         </div>
       </section>
