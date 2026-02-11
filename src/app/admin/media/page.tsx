@@ -25,6 +25,12 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs"
 import { BeforeAfterUpload } from "@/components/admin/before-after-upload"
 
 export default function MediaPage() {
@@ -36,6 +42,7 @@ export default function MediaPage() {
   const [deletingItem, setDeletingItem] = useState<{ id: string; url: string; alt_text: string } | null>(null)
   const [viewingItem, setViewingItem] = useState<any | null>(null)
   const [editForm, setEditForm] = useState({ alt_text: "", caption: "" })
+  const [activeTab, setActiveTab] = useState("media")
 
   const fetchMedia = useCallback(async () => {
     const supabase = createClient()
@@ -194,52 +201,56 @@ export default function MediaPage() {
         </p>
       </div>
 
-      {/* Upload Area */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle>Upload Media</CardTitle>
-            <Button variant="outline" size="sm" onClick={fetchMedia}>
-              Refresh
-            </Button>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div
-            className={`relative flex min-h-[200px] cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed transition-colors ${
-              dragActive
-                ? "border-navy bg-navy/5 dark:border-[#3b82f6] dark:bg-[#3b82f6]/5"
-                : "border-border hover:border-muted-foreground/50"
-            }`}
-            onDragEnter={handleDrag}
-            onDragLeave={handleDrag}
-            onDragOver={handleDrag}
-            onDrop={handleDrop}
-          >
-            <input
-              type="file"
-              multiple
-              accept="image/*,video/*"
-              onChange={handleFileChange}
-              className="absolute inset-0 cursor-pointer opacity-0"
-              disabled={isUploading}
-            />
-            <Upload className="h-10 w-10 text-muted-foreground" />
-            <p className="mt-4 text-sm font-medium">
-              {isUploading ? "Uploading..." : "Drag and drop files here, or click to browse"}
-            </p>
-            <p className="mt-1 text-xs text-muted-foreground">
-              Supports images and videos up to 50MB
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="media">Media Library</TabsTrigger>
+          <TabsTrigger value="before-after">Before & After</TabsTrigger>
+        </TabsList>
 
-      {/* Before & After Slider */}
-      <BeforeAfterUpload />
+        <TabsContent value="media" className="space-y-6">
+          {/* Upload Area */}
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <CardTitle>Upload Media</CardTitle>
+                <Button variant="outline" size="sm" onClick={fetchMedia}>
+                  Refresh
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div
+                className={`relative flex min-h-[200px] cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed transition-colors ${
+                  dragActive
+                    ? "border-navy bg-navy/5 dark:border-[#3b82f6] dark:bg-[#3b82f6]/5"
+                    : "border-border hover:border-muted-foreground/50"
+                }`}
+                onDragEnter={handleDrag}
+                onDragLeave={handleDrag}
+                onDragOver={handleDrag}
+                onDrop={handleDrop}
+              >
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*,video/*"
+                  onChange={handleFileChange}
+                  className="absolute inset-0 cursor-pointer opacity-0"
+                  disabled={isUploading}
+                />
+                <Upload className="h-10 w-10 text-muted-foreground" />
+                <p className="mt-4 text-sm font-medium">
+                  {isUploading ? "Uploading..." : "Drag and drop files here, or click to browse"}
+                </p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Supports images and videos up to 50MB
+                </p>
+              </div>
+            </CardContent>
+          </Card>
 
-      {/* Media Grid */}
-      <div>
+          {/* Media Grid */}
+          <div>
         <h2 className="mb-4 text-lg font-semibold">All Media</h2>
         {isLoading ? (
           <div className="py-12 text-center text-muted-foreground">Loading...</div>
@@ -417,6 +428,13 @@ export default function MediaPage() {
           )}
         </DialogContent>
       </Dialog>
+        </TabsContent>
+
+        {/* Before & After Tab */}
+        <TabsContent value="before-after" className="space-y-6">
+          <BeforeAfterUpload />
+        </TabsContent>
+      </Tabs>
     </div>
   )
 }
