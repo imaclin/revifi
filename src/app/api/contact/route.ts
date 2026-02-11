@@ -86,7 +86,7 @@ export async function POST(request: NextRequest) {
     // Send email notification
     try {
       await resend.emails.send({
-        from: "REVIFI Contact Form <noreply@send.revifi.com>",
+        from: "REVIFI Contact Form <info@revifi.com>",
         to: ["kcstitak@gmail.com", "kl335704@gmail.com", "info@revifi.com"],
         subject: `New Contact Form: ${subject}`,
         html: `
