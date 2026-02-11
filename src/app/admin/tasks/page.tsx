@@ -123,8 +123,8 @@ export default function TasksPage() {
             />
           </div>
 
-          {/* Property Grid */}
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {/* Property List */}
+          <div className="space-y-1">
             {filteredProjects.map((project) => {
               const summary = taskSummaries[project.id]
               const total = summary?.total || 0
@@ -135,73 +135,82 @@ export default function TasksPage() {
               return (
                 <Card
                   key={project.id}
-                  className="group cursor-pointer overflow-hidden transition-all hover:shadow-md hover:border-foreground/20"
+                  className="group cursor-pointer transition-all hover:border-foreground/20"
                   onClick={() => handleClick(project.id)}
                 >
-                  {/* Property Image */}
-                  <div className="relative aspect-[16/9] overflow-hidden bg-muted">
-                    {project.featured_image_url ? (
-                      <img
-                        src={project.featured_image_url}
-                        alt={project.title}
-                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                      />
-                    ) : (
-                      <div className="flex h-full items-center justify-center">
-                        <Building2 className="h-10 w-10 text-muted-foreground/30" />
-                      </div>
-                    )}
-                    {overdue > 0 && (
-                      <Badge variant="destructive" className="absolute right-2 top-2 gap-1">
-                        <AlertTriangle className="h-3 w-3" />
-                        {overdue} overdue
-                      </Badge>
-                    )}
-                  </div>
-
-                  <CardContent className="p-4">
-                    <h3 className="font-semibold leading-tight">{project.title}</h3>
-                    {project.location && (
-                      <p className="mt-0.5 text-xs text-muted-foreground">{project.location}</p>
-                    )}
-
-                    {/* Progress */}
-                    <div className="mt-3 space-y-1.5">
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="flex items-center gap-1 text-muted-foreground">
-                          <CheckCircle2 className="h-3 w-3" />
-                          {completed}/{total} tasks
-                        </span>
-                        {total > 0 && (
-                          <span className={cn(
-                            "font-medium",
-                            progress === 100 ? "text-green-600 dark:text-green-400" : "text-muted-foreground"
-                          )}>
-                            {progress}%
-                          </span>
-                        )}
-                      </div>
-                      {total > 0 && (
-                        <div className="h-1.5 w-full overflow-hidden rounded-full bg-muted">
-                          <div
-                            className={cn(
-                              "h-full rounded-full transition-all duration-500",
-                              progress === 100
-                                ? "bg-green-500 dark:bg-green-400"
-                                : progress > 0
-                                ? "bg-blue-500 dark:bg-blue-400"
-                                : "bg-muted-foreground/20"
-                            )}
-                            style={{ width: `${progress}%` }}
-                          />
+                  <CardContent className="flex items-center gap-4 p-4">
+                    {/* Property thumbnail */}
+                    <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-md bg-muted">
+                      {project.featured_image_url ? (
+                        <img
+                          src={project.featured_image_url}
+                          alt={project.title}
+                          className="h-full w-full object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-full items-center justify-center">
+                          <Building2 className="h-5 w-5 text-muted-foreground/30" />
                         </div>
                       )}
-                      {total === 0 && (
-                        <p className="flex items-center gap-1 text-xs text-muted-foreground">
-                          <Clock className="h-3 w-3" />
-                          No tasks yet
-                        </p>
+                    </div>
+
+                    {/* Property info */}
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-medium leading-tight">{project.title}</h3>
+                        {overdue > 0 && (
+                          <Badge variant="destructive" className="gap-1 text-[10px] px-1.5 py-0">
+                            <AlertTriangle className="h-3 w-3" />
+                            {overdue}
+                          </Badge>
+                        )}
+                      </div>
+                      {project.location && (
+                        <p className="text-xs text-muted-foreground">{project.location}</p>
                       )}
+
+                      {/* Progress */}
+                      <div className="mt-1.5 flex items-center gap-3">
+                        {total > 0 ? (
+                          <>
+                            <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                              <CheckCircle2 className="h-3 w-3" />
+                              {completed}/{total}
+                            </div>
+                            <div className="h-1.5 w-20 overflow-hidden rounded-full bg-muted">
+                              <div
+                                className={cn(
+                                  "h-full rounded-full transition-all duration-500",
+                                  progress === 100
+                                    ? "bg-green-500 dark:bg-green-400"
+                                    : progress > 0
+                                    ? "bg-blue-500 dark:bg-blue-400"
+                                    : "bg-muted-foreground/20"
+                                )}
+                                style={{ width: `${progress}%` }}
+                              />
+                            </div>
+                            <span className={cn(
+                              "text-xs font-medium",
+                              progress === 100 ? "text-green-600 dark:text-green-400" : "text-muted-foreground"
+                            )}>
+                              {progress}%
+                            </span>
+                          </>
+                        ) : (
+                          <p className="flex items-center gap-1 text-xs text-muted-foreground">
+                            <Clock className="h-3 w-3" />
+                            No tasks yet
+                          </p>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Arrow indicator */}
+                    <div className="text-muted-foreground/40 group-hover:text-muted-foreground">
+                      <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
                     </div>
                   </CardContent>
                 </Card>
