@@ -109,7 +109,7 @@ export function ProjectsViewToggle({ projects }: ProjectsViewToggleProps) {
 
       {/* List View */}
       {view === "list" && (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
           {projects.map((project) => (
             <Link key={project.slug} href={`/projects/${project.slug}`} className="block">
               <Card className="group overflow-hidden transition-all hover:shadow-md hover:border-foreground/20 p-0">
@@ -130,7 +130,7 @@ export function ProjectsViewToggle({ projects }: ProjectsViewToggleProps) {
                   </div>
 
                   {/* Content */}
-                  <div className="flex-1 py-3 pr-4">
+                  <div className="flex-1 py-2 pr-4">
                     <div className="flex flex-wrap items-center gap-2 mb-1">
                       <Badge variant="outline" className="capitalize text-xs">
                         {project.category}

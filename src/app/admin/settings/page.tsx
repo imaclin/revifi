@@ -132,36 +132,7 @@ export default function SettingsPage() {
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Database Setup</CardTitle>
-              <CardDescription>
-                Instructions for setting up your Supabase database
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-sm text-muted-foreground">
-                To complete the setup, you need to run the database migration in your 
-                Supabase project. Copy the SQL from the migration file and run it in 
-                the Supabase SQL editor.
-              </p>
-              <div className="rounded-lg bg-muted p-4">
-                <p className="text-sm font-medium">Migration file location:</p>
-                <code className="text-sm text-muted-foreground">
-                  /supabase/migrations/001_initial_schema.sql
-                </code>
-              </div>
-              <ol className="list-inside list-decimal space-y-2 text-sm text-muted-foreground">
-                <li>Go to your Supabase project dashboard</li>
-                <li>Navigate to the SQL Editor</li>
-                <li>Copy and paste the migration SQL</li>
-                <li>Run the query to create all tables</li>
-                <li>Create a storage bucket named &quot;media&quot;</li>
-                <li>Set up Row Level Security policies as needed</li>
-              </ol>
-            </CardContent>
-          </Card>
-
+          
           <div className="flex justify-end">
             <Button type="submit" className="gap-2" disabled={isSubmitting}>
               <Save className="h-4 w-4" />

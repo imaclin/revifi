@@ -27,13 +27,14 @@ interface Project {
 
 interface ProjectsListProps {
   initialProjects: Project[]
+  viewMode: "list" | "grid"
+  setViewMode: (mode: "list" | "grid") => void
 }
 
-export function ProjectsList({ initialProjects }: ProjectsListProps) {
+export function ProjectsList({ initialProjects, viewMode, setViewMode }: ProjectsListProps) {
   const router = useRouter()
   const adminPath = useAdminPath()
   const [projects, setProjects] = useState(initialProjects)
-  const [viewMode, setViewMode] = useState<"list" | "grid">("list")
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null)
 
   const handleDragStart = (index: number) => {
@@ -93,23 +94,6 @@ export function ProjectsList({ initialProjects }: ProjectsListProps) {
 
   return (
     <div className="space-y-4">
-      {/* View Toggle */}
-      <div className="flex justify-end gap-2">
-        <Button
-          variant={viewMode === "list" ? "default" : "outline"}
-          size="icon"
-          onClick={() => setViewMode("list")}
-        >
-          <List className="h-4 w-4" />
-        </Button>
-        <Button
-          variant={viewMode === "grid" ? "default" : "outline"}
-          size="icon"
-          onClick={() => setViewMode("grid")}
-        >
-          <LayoutGrid className="h-4 w-4" />
-        </Button>
-      </div>
 
       {/* List View */}
       {viewMode === "list" && (
@@ -126,11 +110,11 @@ export function ProjectsList({ initialProjects }: ProjectsListProps) {
                 onDragOver={(e) => handleDragOver(e, index)}
                 onDragEnd={handleDragEnd}
                 onClick={() => handleRowClick(project.id)}
-                className={`cursor-pointer overflow-hidden transition-all hover:bg-muted/50 ${
+                className={`cursor-pointer overflow-hidden transition-all hover:bg-muted/50 p-0 gap-0 ${
                   draggedIndex === index ? "opacity-50 ring-2 ring-primary" : ""
                 }`}
               >
-                <div className="flex items-center gap-4 p-4">
+                <div className="flex items-center gap-3 px-2 py-2.5">
                   {/* Drag Handle */}
                   <div className="cursor-grab text-muted-foreground hover:text-foreground">
                     <GripVertical className="h-5 w-5" />
@@ -150,26 +134,10 @@ export function ProjectsList({ initialProjects }: ProjectsListProps) {
                   </div>
 
                   {/* Content */}
-                  <div className="flex-1 space-y-1">
-                    <div className="flex items-center gap-2">
-                      <h3 className="font-serif text-lg font-semibold">{project.title}</h3>
-                      <Badge variant="outline" className="capitalize">
-                        {project.category}
-                      </Badge>
-                      <Badge
-                        variant={project.status === "completed" ? "default" : "secondary"}
-                        className="capitalize"
-                      >
-                        {project.status}
-                      </Badge>
-                      {project.featured && (
-                        <Badge className="bg-goldenrod text-white dark:bg-[#fbbf24]">
-                          Featured
-                        </Badge>
-                      )}
-                    </div>
-                    <p className="text-sm text-muted-foreground">{project.subtitle}</p>
-                    <p className="text-sm text-muted-foreground">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-serif text-lg font-semibold">{project.title}</h3>
+                    <p className="text-sm text-muted-foreground mt-0.5 truncate">{project.subtitle}</p>
+                    <p className="text-xs text-muted-foreground">
                       {project.location} {project.location && project.year && "•"} {project.year}
                     </p>
                   </div>

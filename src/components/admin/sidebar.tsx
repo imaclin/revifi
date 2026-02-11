@@ -26,7 +26,6 @@ import { toast } from "sonner"
 import { useAdminPath } from "@/hooks/use-admin-path"
 
 const navigation = [
-  { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
   { name: "Projects", href: "/admin/projects", icon: FolderKanban },
   { name: "Tasks", href: "/admin/tasks", icon: ClipboardList },
   { name: "Media", href: "/admin/media", icon: Image },
