@@ -47,25 +47,48 @@ export default function ContactPage() {
     message: "",
   })
 
+  const [honeypot, setHoneypot] = useState("")
+  const [cooldown, setCooldown] = useState(false)
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (cooldown) return
     setIsSubmitting(true)
 
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...formData, honeypot }),
+      })
 
-    toast.success("Message sent!", {
-      description: "We'll get back to you as soon as possible.",
-    })
+      const data = await res.json()
 
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      subject: "",
-      message: "",
-    })
-    setIsSubmitting(false)
+      if (!res.ok) {
+        toast.error(data.error || "Failed to send message.")
+        return
+      }
+
+      toast.success("Message sent!", {
+        description: "We'll get back to you as soon as possible.",
+      })
+
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        subject: "",
+        message: "",
+      })
+
+      // 5 second cooldown after successful submission
+      setCooldown(true)
+      setTimeout(() => setCooldown(false), 5000)
+    } catch {
+      toast.error("Something went wrong. Please try again.")
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -157,8 +180,18 @@ export default function ContactPage() {
                       placeholder="Tell us about your project..."
                     />
                   </div>
-                  <Button type="submit" className="w-full" disabled={isSubmitting}>
-                    {isSubmitting ? "Sending..." : "Send Message"}
+                  {/* Honeypot - hidden from real users */}
+                  <div className="absolute opacity-0 pointer-events-none" aria-hidden="true" tabIndex={-1}>
+                    <Input
+                      name="website"
+                      value={honeypot}
+                      onChange={(e) => setHoneypot(e.target.value)}
+                      tabIndex={-1}
+                      autoComplete="off"
+                    />
+                  </div>
+                  <Button type="submit" className="w-full" disabled={isSubmitting || cooldown}>
+                    {isSubmitting ? "Sending..." : cooldown ? "Message Sent!" : "Send Message"}
                   </Button>
                 </form>
               </CardContent>
