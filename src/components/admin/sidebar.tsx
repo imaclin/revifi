@@ -7,6 +7,7 @@ import { User } from "@supabase/supabase-js"
 import {
   LayoutDashboard,
   FolderKanban,
+  ClipboardList,
   Image,
   Users,
   Settings,
@@ -26,6 +27,7 @@ import { useAdminPath } from "@/hooks/use-admin-path"
 const navigation = [
   { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
   { name: "Projects", href: "/admin/projects", icon: FolderKanban },
+  { name: "Tasks", href: "/admin/tasks", icon: ClipboardList },
   { name: "Media", href: "/admin/media", icon: Image },
   { name: "Team", href: "/admin/team", icon: Users },
   { name: "Settings", href: "/admin/settings", icon: Settings },
