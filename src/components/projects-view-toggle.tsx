@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { Building2, LayoutGrid, List, MapPin } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
@@ -24,7 +24,16 @@ interface ProjectsViewToggleProps {
 }
 
 export function ProjectsViewToggle({ projects }: ProjectsViewToggleProps) {
-  const [view, setView] = useState<"grid" | "list">("grid")
+  const [view, setView] = useState<"grid" | "list">(() => {
+    if (typeof window !== "undefined") {
+      return window.innerWidth < 640 ? "list" : "grid"
+    }
+    return "grid"
+  })
+
+  useEffect(() => {
+    setView(window.innerWidth < 640 ? "list" : "grid")
+  }, [])
 
   return (
     <div>
