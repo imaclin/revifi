@@ -11,12 +11,15 @@ const phrases = [
   "quality-focused",
 ]
 
+const brandColors = ['#b91c1c', '#1e3a5f', '#fbbf24']
+
 export function RotatingText({ className }: { className?: string }) {
   const [index, setIndex] = useState(0)
   const [nextIndex, setNextIndex] = useState(0)
   const [phase, setPhase] = useState<"idle" | "out" | "in">("idle")
   const measureRef = useRef<HTMLSpanElement>(null)
   const [width, setWidth] = useState<number | undefined>(undefined)
+  const [color, setColor] = useState(brandColors[0])
 
   // Measure width of current phrase
   useEffect(() => {
@@ -33,6 +36,7 @@ export function RotatingText({ className }: { className?: string }) {
 
       setTimeout(() => {
         setIndex(next)
+        setColor(brandColors[Math.floor(Math.random() * brandColors.length)])
         setPhase("in")
       }, 350)
 
@@ -64,7 +68,7 @@ export function RotatingText({ className }: { className?: string }) {
           phase === "in" && "opacity-0 translate-y-full",
           phase === "idle" && "opacity-100 translate-y-0"
         )}
-        style={{ transitionDuration: "350ms" }}
+        style={{ transitionDuration: "350ms", color: color }}
       >
         {phrases[index]}
       </span>

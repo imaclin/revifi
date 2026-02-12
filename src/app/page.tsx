@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { HeroCarousel } from "@/components/hero-carousel"
 import { createClient } from "@/lib/supabase/server"
 import { ScrollAnimation, StaggerContainer, StaggerItem } from "@/components/animations/scroll-animations"
-import { BeforeAfterSlider } from "@/components/before-after-slider"
+import { BeforeAfterCarousel } from "@/components/before-after-carousel"
 import { ScrollingTestimonials } from "@/components/scrolling-testimonials"
 import { ContactCTA } from "@/components/contact-cta"
 import { getIcon } from "@/lib/icons"
@@ -22,16 +22,11 @@ export default async function Home() {
     .order("sort_order", { ascending: true })
     .limit(5)
 
-  // Fetch before/after slider images
-  const { data: sliderSettings } = await supabase
-    .from("site_settings")
-    .select("key, value")
-    .in("key", ["before_after_before_image", "before_after_after_image"])
-
-  const beforeImage = sliderSettings?.find(s => s.key === "before_after_before_image")?.value
-    || "https://a0.muscache.com/im/pictures/miso/Hosting-1216698124792854681/original/9f4b5397-d9d4-46d0-ba4f-d760fe35e922.jpeg?im_w=1200"
-  const afterImage = sliderSettings?.find(s => s.key === "before_after_after_image")?.value
-    || "https://a0.muscache.com/im/pictures/miso/Hosting-1216698124792854681/original/52034d96-99fc-4a0f-9bff-90c6f573573b.jpeg?im_w=1200"
+  // Fetch before/after pairs
+  const { data: beforeAfterPairs } = await supabase
+    .from("before_after_pairs")
+    .select("id, title, before_image, after_image")
+    .order("display_order", { ascending: true })
 
   // Fallback to any published projects if no featured ones
   // Fetch testimonials
@@ -67,13 +62,7 @@ export default async function Home() {
         <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
             <ScrollAnimation variant="slideInLeft">
-              <BeforeAfterSlider
-                beforeImage={beforeImage}
-                afterImage={afterImage}
-                beforeLabel="Before"
-                afterLabel="After"
-                className="aspect-[4/3]"
-              />
+              <BeforeAfterCarousel pairs={beforeAfterPairs || []} />
             </ScrollAnimation>
             <ScrollAnimation variant="slideInRight" className="flex flex-col justify-center">
               <p className="text-sm font-medium uppercase tracking-widest text-muted-foreground">
