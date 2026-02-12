@@ -1,6 +1,5 @@
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
 import { ScrollAnimation } from "@/components/animations/scroll-animations"
+import { ColorHoverButton } from "@/components/color-hover-button"
 
 export function ContactCTA() {
   return (
@@ -21,11 +20,9 @@ export function ContactCTA() {
           Ready to transform your space? Contact us to discuss your next project.
         </p>
         <div className="mt-8">
-          <Link href="/contact">
-            <Button size="lg" variant="outline">
-              Build With Us
-            </Button>
-          </Link>
+          <ColorHoverButton href="/contact" size="lg" className="bg-white text-black border-white">
+            Build With Us
+          </ColorHoverButton>
         </div>
       </ScrollAnimation>
     </section>

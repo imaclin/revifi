@@ -8,6 +8,7 @@ import { ScrollAnimation, StaggerContainer, StaggerItem } from "@/components/ani
 import { BeforeAfterCarousel } from "@/components/before-after-carousel"
 import { ScrollingTestimonials } from "@/components/scrolling-testimonials"
 import { ContactCTA } from "@/components/contact-cta"
+import { ColorHoverButton } from "@/components/color-hover-button"
 import { getIcon } from "@/lib/icons"
 
 export default async function Home() {
@@ -78,12 +79,10 @@ export default async function Home() {
                 and specialized team and skill set.
               </p>
               <div className="mt-8">
-                <Link href="/about">
-                  <Button variant="outline" className="gap-2">
-                    Discover Our Process
-                    <ArrowRight className="h-4 w-4" />
-                  </Button>
-                </Link>
+                <ColorHoverButton href="/about" className="gap-2">
+                  Discover Our Process
+                  <ArrowRight className="h-4 w-4" />
+                </ColorHoverButton>
               </div>
             </ScrollAnimation>
           </div>
@@ -134,12 +133,10 @@ export default async function Home() {
             ))}
           </StaggerContainer>
           <ScrollAnimation className="mt-12 text-center" delay={0.3}>
-            <Link href="/projects">
-              <Button variant="outline" size="lg" className="gap-2">
-                View All Projects
-                <ArrowRight className="h-4 w-4" />
-              </Button>
-            </Link>
+            <ColorHoverButton href="/projects" size="lg" className="gap-2">
+              View All Projects
+              <ArrowRight className="h-4 w-4" />
+            </ColorHoverButton>
           </ScrollAnimation>
         </div>
       </section>

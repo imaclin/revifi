@@ -4,6 +4,7 @@ import { Building2 } from "lucide-react"
 import { createClient } from "@/lib/supabase/server"
 import { ScrollAnimation } from "@/components/animations/scroll-animations"
 import { ProjectsViewToggle } from "@/components/projects-view-toggle"
+import { ColorHoverButton } from "@/components/color-hover-button"
 
 export const metadata: Metadata = {
   title: "Projects",
@@ -44,8 +45,15 @@ export default async function ProjectsPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="border-t border-border bg-muted py-24 text-foreground">
-        <ScrollAnimation className="container mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+      <section className="relative overflow-hidden border-t border-border bg-muted py-24 text-foreground">
+        <div className="absolute inset-0 opacity-[0.12]">
+          <img
+            src="/kylekc.png"
+            alt=""
+            className="h-full w-full object-cover filter grayscale"
+          />
+        </div>
+        <ScrollAnimation className="container relative mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
           <h2 className="font-serif text-3xl font-bold tracking-tight sm:text-4xl">
             Have a Project in Mind?
           </h2>
@@ -53,12 +61,9 @@ export default async function ProjectsPage() {
             We&apos;d love to hear about your vision. Let&apos;s create something extraordinary together.
           </p>
           <div className="mt-8">
-            <Link
-              href="/contact"
-              className="inline-flex h-12 items-center justify-center rounded-md border border-input bg-transparent px-8 text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
-            >
+            <ColorHoverButton href="/contact" size="lg" className="bg-white text-black border-white">
               Start Your Project
-            </Link>
+            </ColorHoverButton>
           </div>
         </ScrollAnimation>
       </section>

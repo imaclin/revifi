@@ -8,6 +8,7 @@ import { useTheme } from "next-themes"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet"
 import { cn } from "@/lib/utils"
+import { ColorHoverButton } from "@/components/color-hover-button"
 
 const navigation = [
   { name: "Home", href: "/" },
@@ -62,11 +63,11 @@ export function Header() {
             <span className="sr-only">Toggle theme</span>
           </Button>
 
-          <Link href="/contact" className="hidden md:block">
-            <Button className="bg-foreground text-background hover:bg-foreground/90">
+          <div className="hidden md:block">
+            <ColorHoverButton href="/contact" className="bg-foreground text-background border-foreground">
               Let&apos;s Talk
-            </Button>
-          </Link>
+            </ColorHoverButton>
+          </div>
 
           {/* Mobile: Theme toggle + Hamburger */}
           <Button

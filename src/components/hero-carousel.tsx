@@ -6,6 +6,7 @@ import { ArrowRight, Building2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { RotatingText } from "@/components/rotating-text"
+import { ColorHoverButton } from "@/components/color-hover-button"
 
 interface Project {
   id: string
@@ -180,16 +181,12 @@ export function HeroCarousel({ projects }: HeroCarouselProps) {
             inspired designs that blend precision with creativity.
           </p>
           <div className="flex flex-col gap-4 sm:flex-row lg:justify-start">
-            <Link href="/projects">
-              <Button size="lg" className="gap-2 w-full sm:w-auto">
-                View Our Projects <ArrowRight className="h-4 w-4" />
-              </Button>
-            </Link>
-            <Link href="/contact">
-              <Button size="lg" variant="outline" className="w-full sm:w-auto">
-                Get In Touch
-              </Button>
-            </Link>
+            <ColorHoverButton href="/projects" size="lg" className="gap-2 w-full sm:w-auto bg-foreground text-background border-foreground">
+              View Our Projects <ArrowRight className="h-4 w-4" />
+            </ColorHoverButton>
+            <ColorHoverButton href="/contact" size="lg" className="w-full sm:w-auto">
+              Get In Touch
+            </ColorHoverButton>
           </div>
         </div>
 
@@ -203,16 +200,12 @@ export function HeroCarousel({ projects }: HeroCarouselProps) {
 
         {/* Mobile Buttons - Below Image */}
         <div className="order-6 flex flex-col gap-4 lg:hidden">
-          <Link href="/projects">
-            <Button size="lg" className="gap-2 w-full">
-              View Our Projects <ArrowRight className="h-4 w-4" />
-            </Button>
-          </Link>
-          <Link href="/contact">
-            <Button size="lg" variant="outline" className="w-full">
-              Get In Touch
-            </Button>
-          </Link>
+          <ColorHoverButton href="/projects" size="lg" className="gap-2 w-full bg-foreground text-background border-foreground">
+            View Our Projects <ArrowRight className="h-4 w-4" />
+          </ColorHoverButton>
+          <ColorHoverButton href="/contact" size="lg" className="w-full">
+            Get In Touch
+          </ColorHoverButton>
         </div>
       </div>
     </section>

@@ -23,6 +23,7 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs"
 import { ProjectFiles } from "@/components/admin/project-files"
+import { ProjectBeforeAfter } from "@/components/admin/project-before-after"
 
 interface ProjectMediaProps {
   projectId?: string
@@ -245,9 +246,10 @@ export function ProjectMedia({ projectId, media, onMediaChange }: ProjectMediaPr
       </CardHeader>
       <CardContent>
       <Tabs defaultValue="media" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-2">
+        <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="media">Media</TabsTrigger>
           <TabsTrigger value="files">Files</TabsTrigger>
+          <TabsTrigger value="before-after">Before & After</TabsTrigger>
         </TabsList>
 
         <TabsContent value="media" className="space-y-6">
@@ -358,6 +360,16 @@ export function ProjectMedia({ projectId, media, onMediaChange }: ProjectMediaPr
           ) : (
             <div className="py-8 text-center text-sm text-muted-foreground">
               Save the project first to upload files.
+            </div>
+          )}
+        </TabsContent>
+
+        <TabsContent value="before-after">
+          {projectId ? (
+            <ProjectBeforeAfter projectId={projectId} />
+          ) : (
+            <div className="py-8 text-center text-sm text-muted-foreground">
+              Save the project first to add before/after pairs.
             </div>
           )}
         </TabsContent>

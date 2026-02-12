@@ -7,6 +7,8 @@ import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { createClient } from "@/lib/supabase/server"
 import { ProjectGallery } from "@/components/project-gallery"
+import { BeforeAfterSlider } from "@/components/before-after-slider"
+import { ColorHoverButton } from "@/components/color-hover-button"
 
 const projects = [
   {
@@ -130,6 +132,13 @@ export default async function ProjectPage({ params }: Props) {
     .eq("project_id", project.id)
     .order("sort_order", { ascending: true })
 
+  // Fetch before/after pairs for the project
+  const { data: beforeAfterPairs } = await supabase
+    .from("project_before_after")
+    .select("id, title, before_image, after_image")
+    .eq("project_id", project.id)
+    .order("display_order", { ascending: true })
+
   return (
     <div className="flex flex-col">
       {/* Back Navigation */}
@@ -245,20 +254,49 @@ export default async function ProjectPage({ params }: Props) {
         </div>
       </section>
 
+      {/* Before & After Section */}
+      {beforeAfterPairs && beforeAfterPairs.length > 0 && (
+        <section className="border-b border-border bg-background py-16">
+          <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <h2 className="font-serif text-3xl font-bold">Before & After</h2>
+            <div className="mt-8 grid gap-8 md:grid-cols-2">
+              {beforeAfterPairs.map((pair) => (
+                <div key={pair.id} className="space-y-3">
+                  {pair.title && (
+                    <h3 className="text-sm font-medium text-muted-foreground">{pair.title}</h3>
+                  )}
+                  <BeforeAfterSlider
+                    beforeImage={pair.before_image}
+                    afterImage={pair.after_image}
+                    beforeLabel="Before"
+                    afterLabel="After"
+                    className="aspect-[4/3] rounded-lg"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* CTA Section */}
-      <section className="bg-muted py-16 text-foreground">
-        <div className="container mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+      <section className="relative overflow-hidden bg-muted py-16 text-foreground">
+        <div className="absolute inset-0 opacity-[0.12]">
+          <img
+            src="/kylekc.png"
+            alt=""
+            className="h-full w-full object-cover filter grayscale"
+          />
+        </div>
+        <div className="container relative mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
           <h2 className="font-serif text-3xl font-bold">Interested in a Similar Project?</h2>
           <p className="mx-auto mt-4 max-w-2xl text-muted-foreground">
             Let&apos;s discuss how we can bring your vision to life.
           </p>
           <div className="mt-8">
-            <Link
-              href="/contact"
-              className="inline-flex h-12 items-center justify-center rounded-md border border-input bg-transparent px-8 text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
-            >
+            <ColorHoverButton href="/contact" size="lg" className="bg-white text-black border-white">
               Start Your Project
-            </Link>
+            </ColorHoverButton>
           </div>
         </div>
       </section>
